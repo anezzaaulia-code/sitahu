@@ -20,6 +20,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".StokActivity" />
+        <activity android:name=".DetailStokActivity" />
+        <activity android:name=".FormPengeluaranActivity" />
+        <activity android:name=".FormProdukActivity" />
+        <activity android:name=".ProdukActivity" />
+        <activity android:name=".PenjualanActivity" />
     </application>
 
 </manifest>
