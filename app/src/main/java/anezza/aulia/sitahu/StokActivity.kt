@@ -2,29 +2,26 @@ package anezza.aulia.sitahu
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.EditText
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
+import anezza.aulia.sitahu.database.DatabaseHelper
 
 class StokActivity : AppCompatActivity() {
 
-    private lateinit var db: DatabaseHelper
-    private lateinit var listProduk: List<Produk>
+    lateinit var db: DatabaseHelper
 
-    // Item 1
-    private lateinit var tvNama1: TextView
-    private lateinit var tvStok1: TextView
-    private lateinit var tvStatus1: TextView
-    private lateinit var btnDetail1: CardView
+    lateinit var tvNama1: TextView
+    lateinit var tvStok1: TextView
+    lateinit var tvStatus1: TextView
 
-    // Item 2
-    private lateinit var tvNama2: TextView
-    private lateinit var tvStok2: TextView
-    private lateinit var tvStatus2: TextView
-    private lateinit var btnDetail2: CardView
+    lateinit var tvNama2: TextView
+    lateinit var tvStok2: TextView
+    lateinit var tvStatus2: TextView
 
-    private lateinit var etCari: EditText
+    lateinit var btnDetail1: LinearLayout
+    lateinit var btnDetail2: LinearLayout
+
+    lateinit var listProduk: List<Produk>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,83 +29,67 @@ class StokActivity : AppCompatActivity() {
 
         db = DatabaseHelper(this)
 
-        // bind view
+        initView()
+        loadData()
+        setupClick()
+    }
+
+    private fun initView() {
         tvNama1 = findViewById(R.id.tvNamaProduk1)
         tvStok1 = findViewById(R.id.tvStokProduk1)
         tvStatus1 = findViewById(R.id.tvStatusProduk1)
-        btnDetail1 = findViewById(R.id.btnDetailProduk1)
 
         tvNama2 = findViewById(R.id.tvNamaProduk2)
         tvStok2 = findViewById(R.id.tvStokProduk2)
         tvStatus2 = findViewById(R.id.tvStatusProduk2)
-        btnDetail2 = findViewById(R.id.btnDetailProduk2)
 
-        etCari = findViewById(R.id.etCariProduk)
-
-        loadData()
+        btnDetail1 = findViewById(R.id.itemTahuPutih)
+        btnDetail2 = findViewById(R.id.itemTahuKuning)
     }
 
     private fun loadData() {
         listProduk = db.getAllProduk()
 
-        if (listProduk.isNotEmpty()) {
+        if (listProduk.size >= 2) {
+            val p1 = listProduk[0]
+            val p2 = listProduk[1]
 
-            // ITEM 1
-            val p1 = listProduk.getOrNull(0)
-            p1?.let {
-                tvNama1.text = it.nama
-                tvStok1.text = "Stok ${it.stok} pcs • Minimum ${it.minStok}"
-
-                val status = getStatus(it)
-                tvStatus1.text = status
-                setStatusColor(tvStatus1, status)
-
-                btnDetail1.setOnClickListener {
-                    openDetail(it.id)
-                }
-            }
-
-            // ITEM 2
-            val p2 = listProduk.getOrNull(1)
-            p2?.let {
-                tvNama2.text = it.nama
-                tvStok2.text = "Stok ${it.stok} pcs • Minimum ${it.minStok}"
-
-                val status = getStatus(it)
-                tvStatus2.text = status
-                setStatusColor(tvStatus2, status)
-
-                btnDetail2.setOnClickListener {
-                    openDetail(it.id)
-                }
-            }
+            setProdukUI(p1, tvNama1, tvStok1, tvStatus1)
+            setProdukUI(p2, tvNama2, tvStok2, tvStatus2)
         }
     }
 
-    private fun getStatus(produk: Produk): String {
-        return when {
-            produk.stok == 0 -> "Habis"
-            produk.stok <= produk.minStok -> "Menipis"
+    private fun setProdukUI(
+        produk: Produk,
+        tvNama: TextView,
+        tvStok: TextView,
+        tvStatus: TextView
+    ) {
+        tvNama.text = produk.nama
+        tvStok.text = "Stok ${produk.stokSaatIni} pcs • Minimum ${produk.stokMinimum}"
+
+        val status = when {
+            produk.stokSaatIni <= 0 -> "Habis"
+            produk.stokSaatIni <= produk.stokMinimum -> "Menipis"
             else -> "Aman"
         }
+
+        tvStatus.text = status
     }
 
-    private fun setStatusColor(tv: TextView, status: String) {
-        when (status) {
-            "Aman" -> tv.setBackgroundColor(0xFFD8E3CB.toInt())
-            "Menipis" -> tv.setBackgroundColor(0xFFFFE0B2.toInt())
-            "Habis" -> tv.setBackgroundColor(0xFFFFCDD2.toInt())
+    private fun setupClick() {
+        btnDetail1.setOnClickListener {
+            openDetail(listProduk[0].id)
+        }
+
+        btnDetail2.setOnClickListener {
+            openDetail(listProduk[1].id)
         }
     }
 
-    private fun openDetail(id: Int) {
+    private fun openDetail(produkId: Int) {
         val intent = Intent(this, DetailStokActivity::class.java)
-        intent.putExtra("id", id)
+        intent.putExtra("produk_id", produkId)
         startActivity(intent)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        loadData()
     }
 }
