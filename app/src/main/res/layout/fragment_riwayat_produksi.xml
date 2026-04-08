@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_app_screen"
+    android:fillViewport="true">
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:orientation="horizontal">
+            <TextView android:id="@+id/btnBack" android:layout_width="42dp" android:layout_height="42dp" android:background="@drawable/bg_icon_soft" android:gravity="center" android:text="←" android:textColor="@color/text_primary" android:textSize="20sp" android:textStyle="bold" />
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:layout_weight="1" android:orientation="vertical">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Riwayat Produksi" android:textColor="@color/text_primary" android:textSize="26sp" android:textStyle="bold" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="Semua data produksi ada di halaman ini" android:textColor="@color/text_secondary" android:textSize="14sp" />
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:background="@drawable/bg_panel" android:orientation="vertical" android:padding="18dp">
+            <LinearLayout android:id="@+id/layoutRiwayatProduksi" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" />
+            <TextView android:id="@+id/tvRiwayatProduksiEmpty" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="" android:textColor="@color/text_muted" android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

@@ -1,616 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F7F3EC">
+    android:background="@drawable/bg_app_screen"
+    android:orientation="vertical">
 
-    <ScrollView
-        android:id="@+id/scrollContent"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/bottom_nav_container"
-        android:fillViewport="true">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="20dp">
-
-            <!-- Header -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingStart="20dp"
-                android:paddingTop="16dp"
-                android:paddingEnd="20dp"
-                android:paddingBottom="14dp">
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/btn_back"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    app:cardBackgroundColor="#F5F1E8"
-                    app:cardCornerRadius="24dp"
-                    app:cardElevation="0dp">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_gravity="center"
-                        android:src="@android:drawable/ic_media_previous" />
-                </androidx.cardview.widget.CardView>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="14dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Pengeluaran"
-                        android:textColor="#2F372F"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="Riwayat biaya operasional"
-                        android:textColor="#7A7A70"
-                        android:textSize="13sp" />
-                </LinearLayout>
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/btn_notif"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    app:cardBackgroundColor="#F5F1E8"
-                    app:cardCornerRadius="24dp"
-                    app:cardElevation="0dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="🔔"
-                        android:textSize="18sp" />
-                </androidx.cardview.widget.CardView>
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#DDD5C8" />
-
-            <!-- Action Cards -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="18dp"
-                android:layout_marginEnd="20dp"
-                android:orientation="horizontal"
-                android:weightSum="2">
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/btnTambahPengeluaran"
-                    android:layout_width="0dp"
-                    android:layout_height="170dp"
-                    android:layout_weight="1"
-                    app:cardBackgroundColor="#E1C763"
-                    app:cardCornerRadius="24dp"
-                    app:cardElevation="0dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="+ Tambah"
-                            android:textColor="#735C1F"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <Space
-                    android:layout_width="12dp"
-                    android:layout_height="1dp" />
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/btnLihatLaporan"
-                    android:layout_width="0dp"
-                    android:layout_height="170dp"
-                    android:layout_weight="1"
-                    app:cardBackgroundColor="#FBF9F4"
-                    app:cardCornerRadius="24dp"
-                    app:cardElevation="0dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Lihat Laporan"
-                            android:textColor="#5E664F"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-            </LinearLayout>
-
-            <!-- List Card -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="16dp"
-                app:cardBackgroundColor="#FBF9F4"
-                app:cardCornerRadius="28dp"
-                app:cardElevation="0dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="380dp"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <!-- Item 1 -->
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/itemExpense1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:cardBackgroundColor="#F3EFE7"
-                        app:cardCornerRadius="18dp"
-                        app:cardElevation="0dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:padding="14dp">
-
-                            <androidx.cardview.widget.CardView
-                                android:layout_width="44dp"
-                                android:layout_height="44dp"
-                                app:cardBackgroundColor="#F4DFD3"
-                                app:cardCornerRadius="22dp"
-                                app:cardElevation="0dp">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:gravity="center"
-                                    android:text="💸"
-                                    android:textSize="18sp" />
-                            </androidx.cardview.widget.CardView>
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="12dp"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Minyak Goreng"
-                                    android:textColor="#35352F"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="4dp"
-                                    android:text="31 Maret 2026 • Pembelian 5 liter"
-                                    android:textColor="#6F6A61"
-                                    android:textSize="13sp" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="end"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
-                                    android:text="Rp 120.000"
-                                    android:textColor="#35352F"
-                                    android:textSize="15sp"
-                                    android:textStyle="bold" />
-
-                                <androidx.cardview.widget.CardView
-                                    android:id="@+id/btnEditExpense1"
-                                    android:layout_width="40dp"
-                                    android:layout_height="40dp"
-                                    android:layout_marginStart="10dp"
-                                    app:cardBackgroundColor="#FBFAF7"
-                                    app:cardCornerRadius="20dp"
-                                    app:cardElevation="0dp">
-
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
-                                        android:gravity="center"
-                                        android:text="✎"
-                                        android:textColor="#35352F"
-                                        android:textSize="14sp" />
-                                </androidx.cardview.widget.CardView>
-                            </LinearLayout>
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-
-                    <!-- Item 2 -->
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/itemExpense2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        app:cardBackgroundColor="#F3EFE7"
-                        app:cardCornerRadius="18dp"
-                        app:cardElevation="0dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:padding="14dp">
-
-                            <androidx.cardview.widget.CardView
-                                android:layout_width="44dp"
-                                android:layout_height="44dp"
-                                app:cardBackgroundColor="#F4DFD3"
-                                app:cardCornerRadius="22dp"
-                                app:cardElevation="0dp">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:gravity="center"
-                                    android:text="💸"
-                                    android:textSize="18sp" />
-                            </androidx.cardview.widget.CardView>
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="12dp"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Gas"
-                                    android:textColor="#35352F"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="4dp"
-                                    android:text="31 Maret 2026 • Isi ulang tabung"
-                                    android:textColor="#6F6A61"
-                                    android:textSize="13sp" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="end"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
-                                    android:text="Rp 80.000"
-                                    android:textColor="#35352F"
-                                    android:textSize="15sp"
-                                    android:textStyle="bold" />
-
-                                <androidx.cardview.widget.CardView
-                                    android:id="@+id/btnEditExpense2"
-                                    android:layout_width="40dp"
-                                    android:layout_height="40dp"
-                                    android:layout_marginStart="10dp"
-                                    app:cardBackgroundColor="#FBFAF7"
-                                    app:cardCornerRadius="20dp"
-                                    app:cardElevation="0dp">
-
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
-                                        android:gravity="center"
-                                        android:text="✎"
-                                        android:textColor="#35352F"
-                                        android:textSize="14sp" />
-                                </androidx.cardview.widget.CardView>
-                            </LinearLayout>
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-
-                    <!-- Item 3 -->
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/itemExpense3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        app:cardBackgroundColor="#F3EFE7"
-                        app:cardCornerRadius="18dp"
-                        app:cardElevation="0dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:padding="14dp">
-
-                            <androidx.cardview.widget.CardView
-                                android:layout_width="44dp"
-                                android:layout_height="44dp"
-                                app:cardBackgroundColor="#F4DFD3"
-                                app:cardCornerRadius="22dp"
-                                app:cardElevation="0dp">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:gravity="center"
-                                    android:text="💸"
-                                    android:textSize="18sp" />
-                            </androidx.cardview.widget.CardView>
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="12dp"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Transport Pasar"
-                                    android:textColor="#35352F"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="4dp"
-                                    android:text="30 Maret 2026 • Antar pasar"
-                                    android:textColor="#6F6A61"
-                                    android:textSize="13sp" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="end"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
-                                    android:text="Rp 40.000"
-                                    android:textColor="#35352F"
-                                    android:textSize="15sp"
-                                    android:textStyle="bold" />
-
-                                <androidx.cardview.widget.CardView
-                                    android:id="@+id/btnEditExpense3"
-                                    android:layout_width="40dp"
-                                    android:layout_height="40dp"
-                                    android:layout_marginStart="10dp"
-                                    app:cardBackgroundColor="#FBFAF7"
-                                    app:cardCornerRadius="20dp"
-                                    app:cardElevation="0dp">
-
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
-                                        android:gravity="center"
-                                        android:text="✎"
-                                        android:textColor="#35352F"
-                                        android:textSize="14sp" />
-                                </androidx.cardview.widget.CardView>
-                            </LinearLayout>
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-        </LinearLayout>
-    </ScrollView>
-
-    <!-- Bottom Navigation -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/bottom_nav_container"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="12dp"
-        app:cardBackgroundColor="#FBF9F4"
-        app:cardCornerRadius="28dp"
-        app:cardElevation="2dp">
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingTop="14dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="12dp">
+
+        <TextView
+            android:id="@+id/btnBack"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:background="@drawable/bg_icon_soft"
+            android:gravity="center"
+            android:text="←"
+            android:textColor="@color/text_primary"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:padding="10dp"
-            android:weightSum="5">
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/navBeranda"
-                android:layout_width="0dp"
-                android:layout_height="62dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pengeluaran"
+                android:textColor="@color/text_primary"
+                android:textSize="26sp"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="🏠"
-                    android:textSize="17sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="Beranda"
-                    android:textColor="#5E5B53"
-                    android:textSize="11sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/navProduksi"
-                android:layout_width="0dp"
-                android:layout_height="62dp"
-                android:layout_marginStart="8dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="🏭"
-                    android:textSize="17sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="Produksi"
-                    android:textColor="#5E5B53"
-                    android:textSize="11sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/navPenjualan"
-                android:layout_width="0dp"
-                android:layout_height="62dp"
-                android:layout_marginStart="8dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="🛒"
-                    android:textSize="17sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="Penjualan"
-                    android:textColor="#5E5B53"
-                    android:textSize="11sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/navStok"
-                android:layout_width="0dp"
-                android:layout_height="62dp"
-                android:layout_marginStart="8dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="📦"
-                    android:textSize="17sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="Stok"
-                    android:textColor="#5E5B53"
-                    android:textSize="11sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/navMenu"
-                android:layout_width="0dp"
-                android:layout_height="62dp"
-                android:layout_marginStart="8dp"
-                android:layout_weight="1"
-                app:cardBackgroundColor="#6F9152"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="0dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="☰"
-                        android:textSize="17sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="Menu"
-                        android:textColor="@android:color/white"
-                        android:textSize="11sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Catat biaya operasional usaha"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp" />
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
 
-</RelativeLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnTambahPengeluaran"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:background="@drawable/bg_button_primary"
+                app:backgroundTint="@null"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="+ Tambah"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/bg_summary_panel"
+        android:orientation="vertical"
+        android:padding="18dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total Pengeluaran"
+            android:textColor="#DDFFFFFF"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tvTotalPengeluaran"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Rp0"
+            android:textColor="@android:color/white"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvEmptyPengeluaran"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/bg_dashed_border"
+        android:gravity="center"
+        android:padding="24dp"
+        android:text="Belum ada pengeluaran tersimpan."
+        android:textColor="@color/text_secondary"
+        android:visibility="gone" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvPengeluaran"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="16dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingBottom="18dp" />
+</LinearLayout>

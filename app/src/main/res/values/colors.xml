@@ -2,4 +2,34 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="bg_base">#F7F4ED</color>
+    <color name="bg_shell">#FCFBF7</color>
+    <color name="card_surface">#FFFFFFFF</color>
+    <color name="line_soft">#DDD5C7</color>
+    <color name="soft_fill">#F4EFE5</color>
+    <color name="soft_fill_2">#FBF8F2</color>
+
+    <color name="green_primary">#5F7D49</color>
+    <color name="green_secondary">#749660</color>
+    <color name="green_soft">#E7EFDC</color>
+    <color name="green_text">#486336</color>
+
+    <color name="gold_primary">#D8B856</color>
+    <color name="gold_soft">#F8ECC1</color>
+    <color name="gold_text">#7A6222</color>
+
+    <color name="orange_primary">#D68C55</color>
+    <color name="orange_soft">#F7DFCE</color>
+    <color name="orange_text">#8B562F</color>
+
+    <color name="blue_soft">#DDEAF7</color>
+    <color name="blue_text">#456882</color>
+
+    <color name="danger_soft">#EFD5CF</color>
+    <color name="danger_text">#7E473E</color>
+
+    <color name="text_primary">#293226</color>
+    <color name="text_secondary">#5D6754</color>
+    <color name="text_muted">#8A8577</color>
 </resources>

@@ -1,182 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F6F2EA">
+    android:background="@drawable/bg_app_screen"
+    android:fillViewport="true">
 
-    <!-- Scroll -->
-    <androidx.core.widget.NestedScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-            <!-- HEADER -->
+            <TextView
+                android:id="@+id/btnBack"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/bg_icon_soft"
+                android:gravity="center"
+                android:text="←"
+                android:textColor="@color/text_primary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="42dp"
-                    android:layout_height="42dp"
-                    app:cardCornerRadius="21dp"
-                    app:cardBackgroundColor="#F4EFE6"
-                    app:cardElevation="0dp">
-
-                    <ImageButton
-                        android:id="@+id/btnBack"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/transparent"
-                        android:src="@android:drawable/ic_media_previous"
-                        android:padding="10dp"/>
-                </androidx.cardview.widget.CardView>
-
-                <LinearLayout
+                <TextView
+                    android:id="@+id/tvTitleProduk"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginStart="12dp">
+                    android:text="Tambah Produk"
+                    android:textColor="@color/text_primary"
+                    android:textSize="26sp"
+                    android:textStyle="bold" />
 
-                    <TextView
-                        android:text="Form Produk"
-                        android:textSize="22sp"
-                        android:textStyle="bold"
-                        android:textColor="#2F342B"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                    <TextView
-                        android:text="Tambah produk baru"
-                        android:textSize="14sp"
-                        android:textColor="#6E6A60"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-                </LinearLayout>
-            </LinearLayout>
-
-            <!-- FORM CARD -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                app:cardCornerRadius="28dp"
-                app:cardElevation="0dp"
-                app:cardBackgroundColor="#FBFAF7">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="20dp">
-
-                    <!-- Nama -->
-                    <TextView
-                        android:text="Nama Produk"
-                        android:textStyle="bold"
-                        android:textColor="#35352F"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-
-                    <EditText
-                        android:id="@+id/etNama"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginTop="6dp"
-                        android:background="#FFFFFF"
-                        android:padding="12dp"
-                        android:hint="Contoh: Tahu Putih"/>
-
-                    <!-- Satuan -->
-                    <TextView
-                        android:layout_marginTop="14dp"
-                        android:text="Satuan"
-                        android:textStyle="bold"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-
-                    <EditText
-                        android:id="@+id/etSatuan"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:background="#FFFFFF"
-                        android:padding="12dp"
-                        android:hint="pcs / pack"/>
-
-                    <!-- Stok -->
-                    <TextView
-                        android:layout_marginTop="14dp"
-                        android:text="Stok awal"
-                        android:textStyle="bold"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-
-                    <EditText
-                        android:id="@+id/etStok"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:inputType="number"
-                        android:background="#FFFFFF"
-                        android:padding="12dp"
-                        android:hint="0"/>
-
-                    <!-- Stok Minimum -->
-                    <TextView
-                        android:layout_marginTop="14dp"
-                        android:text="Stok minimum"
-                        android:textStyle="bold"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-
-                    <EditText
-                        android:id="@+id/etMin"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:inputType="number"
-                        android:background="#FFFFFF"
-                        android:padding="12dp"
-                        android:hint="0"/>
-
-                    <!-- Harga -->
-                    <TextView
-                        android:layout_marginTop="14dp"
-                        android:text="Harga jual"
-                        android:textStyle="bold"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-
-                    <EditText
-                        android:id="@+id/etHarga"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:inputType="number"
-                        android:background="#FFFFFF"
-                        android:padding="12dp"
-                        android:hint="Rp 0"/>
-
-                    <!-- BUTTON -->
-                    <Button
-                        android:id="@+id/btnSimpan"
-                        android:layout_width="match_parent"
-                        android:layout_height="55dp"
-                        android:layout_marginTop="20dp"
-                        android:text="Simpan Produk"
-                        android:textColor="@android:color/white"
-                        android:textStyle="bold"
-                        android:backgroundTint="#78985F"/>
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-
+                    android:layout_marginTop="4dp"
+                    android:text="Simpan produk dengan tampilan seperti prototype"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp" />
+            </LinearLayout>
         </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
 
-</RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_panel_soft"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Data produk"
+                android:textColor="@color/text_primary"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Isi nama, satuan, stok, harga, dan hasil per masak."
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_panel"
+            android:orientation="vertical"
+            android:padding="18dp">
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Nama produk" android:textColor="@color/text_secondary" android:textStyle="bold" />
+            <EditText android:id="@+id/etNama" android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginTop="8dp" android:background="@drawable/bg_input_xml" android:paddingHorizontal="14dp" />
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="14dp" android:text="Satuan" android:textColor="@color/text_secondary" android:textStyle="bold" />
+            <EditText android:id="@+id/etSatuan" android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginTop="8dp" android:background="@drawable/bg_input_xml" android:paddingHorizontal="14dp" />
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="14dp" android:text="Stok awal / saat ini" android:textColor="@color/text_secondary" android:textStyle="bold" />
+            <EditText android:id="@+id/etStok" android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginTop="8dp" android:background="@drawable/bg_input_xml" android:inputType="number" android:paddingHorizontal="14dp" />
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="14dp" android:text="Stok minimum" android:textColor="@color/text_secondary" android:textStyle="bold" />
+            <EditText android:id="@+id/etMin" android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginTop="8dp" android:background="@drawable/bg_input_xml" android:inputType="number" android:paddingHorizontal="14dp" />
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="14dp" android:text="Harga jual" android:textColor="@color/text_secondary" android:textStyle="bold" />
+            <EditText android:id="@+id/etHarga" android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginTop="8dp" android:background="@drawable/bg_input_xml" android:inputType="number" android:paddingHorizontal="14dp" />
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="14dp" android:text="Hasil per masak" android:textColor="@color/text_secondary" android:textStyle="bold" />
+            <EditText android:id="@+id/etHasilPerMasak" android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginTop="8dp" android:background="@drawable/bg_input_xml" android:inputType="number" android:paddingHorizontal="14dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSimpan"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_button_primary"
+                app:backgroundTint="@null"
+                android:text="Simpan Produk"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

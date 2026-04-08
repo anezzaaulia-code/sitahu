@@ -1,433 +1,196 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scrollProduksi"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F6F2EA">
+    android:background="@drawable/bg_app_screen"
+    android:clipToPadding="false"
+    android:fillViewport="true"
+    android:paddingBottom="20dp">
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/bottomNav"
-        android:fillViewport="true">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="30dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingHorizontal="16dp"
-                android:paddingTop="24dp"
-                android:paddingBottom="16dp">
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="42dp"
-                    android:layout_height="42dp"
-                    app:cardBackgroundColor="#FFFFFF"
-                    app:cardCornerRadius="21dp"
-                    app:cardElevation="2dp">
-                    <ImageButton
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/transparent"
-                        android:padding="12dp"
-                        android:src="@android:drawable/ic_media_previous" />
-                </androidx.cardview.widget.CardView>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Produksi Masak"
-                        android:textColor="#2F342B"
-                        android:textSize="24sp"
-                        android:textStyle="bold" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Input produksi tahu dasar"
-                        android:textColor="#6E6A60"
-                        android:textSize="14sp" />
-                </LinearLayout>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="42dp"
-                    android:layout_height="42dp"
-                    app:cardBackgroundColor="#FFFFFF"
-                    app:cardCornerRadius="21dp"
-                    app:cardElevation="2dp">
-                    <ImageButton
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/transparent"
-                        android:padding="10dp"
-                        android:src="@android:drawable/ic_dialog_info"
-                        android:tint="#FFC107" />
-                </androidx.cardview.widget.CardView>
-            </LinearLayout>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                app:cardBackgroundColor="#FBFAF7"
-                app:cardCornerRadius="28dp"
-                app:cardElevation="0dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="20dp">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="12dp">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Parameter aktif"
-                            android:textColor="#2F342B"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:text="Otomatis dipakai saat simpan"
-                            android:textColor="#8B867A"
-                            android:textSize="11sp" />
-                    </RelativeLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:background="@android:drawable/editbox_background"
-                        android:gravity="center_vertical"
-                        android:padding="12dp">
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Tahu Putih"
-                                android:textColor="#2F342B"
-                                android:textStyle="bold" />
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="98 pcs / masak • Standar 1 masak pagi"
-                                android:textSize="12sp" />
-                        </LinearLayout>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@android:drawable/btn_default"
-                            android:backgroundTint="#E8F0E2"
-                            android:paddingHorizontal="12dp"
-                            android:paddingVertical="4dp"
-                            android:text="Aktif"
-                            android:textColor="#78985F"
-                            android:textSize="12sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@android:drawable/editbox_background"
-                        android:gravity="center_vertical"
-                        android:padding="12dp">
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Tahu Kuning"
-                                android:textColor="#2F342B"
-                                android:textStyle="bold" />
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="100 pcs / masak • Standar 1 masak siang"
-                                android:textSize="12sp" />
-                        </LinearLayout>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@android:drawable/btn_default"
-                            android:backgroundTint="#E8F0E2"
-                            android:paddingHorizontal="12dp"
-                            android:paddingVertical="4dp"
-                            android:text="Aktif"
-                            android:textColor="#78985F"
-                            android:textSize="12sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="16dp"
-                app:cardBackgroundColor="#FBFAF7"
-                app:cardCornerRadius="28dp"
-                app:cardElevation="0dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="20dp">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="12dp">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Form produksi"
-                            android:textColor="#2F342B"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:text="Tersimpan ke stok otomatis"
-                            android:textColor="#8B867A"
-                            android:textSize="11sp" />
-                    </RelativeLayout>
-
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Tanggal" android:textStyle="bold" />
-                    <EditText
-                        android:id="@+id/etTanggal"
-                        android:layout_width="match_parent"
-                        android:layout_height="54dp"
-                        android:background="@android:drawable/edit_text"
-                        android:drawableEnd="@android:drawable/ic_menu_my_calendar"
-                        android:hint="03/31/2026"
-                        android:paddingHorizontal="12dp" />
-
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="Produk dasar" android:textStyle="bold" />
-                    <Spinner
-                        android:id="@+id/spProduk"
-                        android:layout_width="match_parent"
-                        android:layout_height="54dp"
-                        android:background="@android:drawable/btn_dropdown" />
-
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="Jumlah masak" android:textStyle="bold" />
-                    <EditText
-                        android:id="@+id/etJumlahMasak"
-                        android:layout_width="match_parent"
-                        android:layout_height="54dp"
-                        android:background="@android:drawable/edit_text"
-                        android:inputType="number"
-                        android:text="1"
-                        android:paddingHorizontal="12dp" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Hasil akhir akan mengikuti parameter aktif." android:textColor="#8B867A" android:textSize="11sp" />
-
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="Catatan" android:textStyle="bold" />
-                    <EditText
-                        android:id="@+id/etCatatan"
-                        android:layout_width="match_parent"
-                        android:layout_height="100dp"
-                        android:background="@android:drawable/edit_text"
-                        android:gravity="top"
-                        android:padding="12dp"
-                        android:text="Produksi rutin harian" />
-
-                    <Button
-                        android:id="@+id/btnSimpan"
-                        android:layout_width="match_parent"
-                        android:layout_height="56dp"
-                        android:layout_marginTop="20dp"
-                        android:backgroundTint="#78985F"
-                        android:text="Simpan Produksi"
-                        android:textAllCaps="false"
-                        android:textColor="#FFFFFF"
-                        android:textSize="18sp"
-                        app:cornerRadius="16dp" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="16dp"
-                app:cardBackgroundColor="#FBFAF7"
-                app:cardCornerRadius="28dp"
-                app:cardElevation="0dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="20dp">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="12dp">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Produksi terbaru"
-                            android:textColor="#2F342B"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:text="Klik untuk riwayat penuh"
-                            android:textColor="#8B867A"
-                            android:textSize="11sp" />
-                    </RelativeLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:background="@android:drawable/editbox_background"
-                        android:gravity="center_vertical"
-                        android:padding="12dp">
-                        <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:src="@android:drawable/ic_input_add"
-                            android:background="#E8F0E2"
-                            android:padding="8dp" />
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="PROD-20260331-001"
-                                android:textStyle="bold" />
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Tahu Putih • 98 pcs"
-                                android:textSize="12sp" />
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="end"
-                            android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="1 masak" android:textStyle="bold" />
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="31 Mar" android:textSize="11sp" />
-                        </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/bottomNav"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="12dp"
-        app:cardBackgroundColor="#FBFAF7"
-        app:cardCornerRadius="28dp"
-        app:cardElevation="8dp">
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="24dp">
+
+        <TextView
+            android:id="@+id/btnBack"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Produksi"
+            android:textColor="@color/text_primary"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Ringkasan produksi tahu dasar"
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:padding="8dp"
-            android:weightSum="5">
+            android:layout_marginTop="14dp"
+            android:background="@drawable/bg_summary_panel"
+            android:orientation="vertical"
+            android:padding="18dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Produksi hari ini"
+                android:textColor="#E6FFFFFF"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tvProduksiHariIni"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="0 pcs"
+                android:textColor="@android:color/white"
+                android:textSize="30sp"
+                android:textStyle="bold" />
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🏠" android:textSize="20sp" />
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Beranda" android:textSize="11sp" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <TextView
+                    android:id="@+id/tvProduksiRingkas1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_mini_card"
+                    android:padding="12dp"
+                    android:text="Batch hari ini: 0"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tvProduksiRingkas2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_mini_card"
+                    android:padding="12dp"
+                    android:text="Total hasil hari ini: 0 pcs"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp" />
             </LinearLayout>
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                app:cardBackgroundColor="#78985F"
-                app:cardCornerRadius="22dp"
-                app:cardElevation="0dp">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:orientation="vertical">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🏭" android:textSize="20sp" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Produksi" android:textColor="#FFFFFF" android:textStyle="bold" android:textSize="11sp" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🛒" android:textSize="20sp" />
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Penjualan" android:textSize="11sp" />
-            </LinearLayout>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="📦" android:textSize="20sp" />
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Stok" android:textSize="11sp" />
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/tvProduksiRingkas3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_mini_card"
+                    android:padding="12dp"
+                    android:text="Parameter aktif: 0"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp" />
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="☰" android:textSize="20sp" />
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Menu" android:textSize="11sp" />
+                <TextView
+                    android:id="@+id/tvProduksiRingkas4"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_mini_card"
+                    android:padding="12dp"
+                    android:text="Riwayat total: 0"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
 
-</RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnShortcutProduksi"
+                android:layout_width="0dp"
+                android:layout_height="46dp"
+                android:layout_marginEnd="6dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_button_primary"
+                app:backgroundTint="@null"
+                android:text="Tambah Produksi"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="13sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnShortcutRiwayatProduksi"
+                android:layout_width="0dp"
+                android:layout_height="46dp"
+                android:layout_marginStart="6dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_button_soft"
+                android:text="Riwayat Produksi"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/panelFormProduksi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/panelRiwayatProduksi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Aktivitas terbaru"
+            android:textColor="@color/text_primary"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/layoutRecentProduksi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical" />
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

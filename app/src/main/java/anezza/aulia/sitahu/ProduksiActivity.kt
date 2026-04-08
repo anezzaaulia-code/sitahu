@@ -2,22 +2,29 @@ package anezza.aulia.sitahu
 
 import android.os.Bundle
 import android.view.View
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Spinner
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import anezza.aulia.sitahu.database.DatabaseHelper
 
 class ProduksiActivity : AppCompatActivity() {
 
-    lateinit var db: DatabaseHelper
+    private lateinit var db: DatabaseHelper
 
-    lateinit var etTanggal: EditText
-    lateinit var spProduk: Spinner
-    lateinit var etJumlah: EditText
-    lateinit var etCatatan: EditText
-    lateinit var btnSimpan: Button
+    private lateinit var etTanggal: EditText
+    private lateinit var spProduk: Spinner
+    private lateinit var etJumlahMasak: EditText
+    private lateinit var etCatatan: EditText
+    private lateinit var tvHasilInfo: TextView
+    private lateinit var btnSimpan: Button
 
-    lateinit var listProduk: List<Produk>
-    var selectedProdukId: Int = 0
+    private var listProduk: List<Produk> = emptyList()
+    private var selectedProduk: Produk? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,116 +32,91 @@ class ProduksiActivity : AppCompatActivity() {
 
         db = DatabaseHelper(this)
 
-        initView()
-        loadProduk()
-        setupAction()
-    }
-
-    // =========================
-    // INIT VIEW
-    // =========================
-    private fun initView() {
         etTanggal = findViewById(R.id.etTanggal)
         spProduk = findViewById(R.id.spProduk)
-        etJumlah = findViewById(R.id.etJumlahMasak)
+        etJumlahMasak = findViewById(R.id.etJumlahMasak)
         etCatatan = findViewById(R.id.etCatatan)
+        tvHasilInfo = findViewById(R.id.tvHasilInfo)
         btnSimpan = findViewById(R.id.btnSimpan)
+
+        etTanggal.setText(FormatHelper.today())
+        findViewById<View>(R.id.btnBack).setOnClickListener { finish() }
+        btnSimpan.setOnClickListener { simpanProduksi() }
+
+        AppNavigator.setupBottomNav(this, AppNavigator.Tab.PRODUKSI)
     }
 
-    // =========================
-    // LOAD DATA PRODUK KE SPINNER
-    // =========================
+    override fun onResume() {
+        super.onResume()
+        loadProduk()
+    }
+
     private fun loadProduk() {
         listProduk = db.getAllProduk()
-
-        val namaList = listProduk.map { it.nama }
-
-        val adapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_spinner_item,
-            namaList
-        )
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spProduk.adapter = adapter
-
-        spProduk.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                val produk = listProduk[position]
-                selectedProdukId = produk.id
-
-                // sementara tampilkan parameter via toast
-                val hasil = db.getParameterAktif(selectedProdukId)
-                Toast.makeText(
-                    this@ProduksiActivity,
-                    "$hasil pcs / masak",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-    }
-
-    // =========================
-    // BUTTON ACTION
-    // =========================
-    private fun setupAction() {
-        btnSimpan.setOnClickListener {
-            simpanProduksi()
-        }
-    }
-
-    // =========================
-    // SIMPAN PRODUKSI
-    // =========================
-    private fun simpanProduksi() {
-
-        val jumlahText = etJumlah.text.toString()
-
-        if (jumlahText.isEmpty()) {
-            Toast.makeText(this, "Jumlah masak harus diisi", Toast.LENGTH_SHORT).show()
+        if (listProduk.isEmpty()) {
+            val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, listOf("Belum ada produk"))
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spProduk.adapter = adapter
+            selectedProduk = null
+            btnSimpan.isEnabled = false
+            tvHasilInfo.text = "Tambahkan produk di menu pengaturan dulu."
             return
         }
 
-        if (selectedProdukId == 0) {
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, listProduk.map { it.nama })
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spProduk.adapter = adapter
+        btnSimpan.isEnabled = true
+        spProduk.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                selectedProduk = listProduk[position]
+                updateHasilInfo()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                selectedProduk = null
+                tvHasilInfo.text = "Pilih produk untuk melihat hasil produksi."
+            }
+        }
+        if (listProduk.isNotEmpty()) {
+            selectedProduk = listProduk.first()
+            updateHasilInfo()
+        }
+    }
+
+    private fun updateHasilInfo() {
+        val produk = selectedProduk ?: return
+        val hasil = db.getParameterAktif(produk.id)
+        tvHasilInfo.text = "1 kali masak menghasilkan $hasil ${produk.satuan}."
+    }
+
+    private fun simpanProduksi() {
+        val produk = selectedProduk
+        val jumlahMasak = etJumlahMasak.text.toString().trim().toIntOrNull()
+        val tanggal = etTanggal.text.toString().trim()
+        val catatan = etCatatan.text.toString().trim()
+
+        if (produk == null) {
             Toast.makeText(this, "Pilih produk dulu", Toast.LENGTH_SHORT).show()
             return
         }
-
-        val jumlahMasak = jumlahText.toInt()
-
-        val hasilPerMasak = db.getParameterAktif(selectedProdukId)
-        val jumlahHasil = jumlahMasak * hasilPerMasak
-
-        val sukses = db.insertProduksi(
-            selectedProdukId,
-            jumlahMasak,
-            etCatatan.text.toString()
-        )
-
-        if (sukses) {
-            Toast.makeText(
-                this,
-                "Produksi berhasil ($jumlahHasil pcs)",
-                Toast.LENGTH_LONG
-            ).show()
-
-            clearForm()
-        } else {
-            Toast.makeText(this, "Gagal menyimpan", Toast.LENGTH_SHORT).show()
+        if (tanggal.isEmpty()) {
+            Toast.makeText(this, "Tanggal produksi wajib diisi", Toast.LENGTH_SHORT).show()
+            return
         }
-    }
+        if (jumlahMasak == null || jumlahMasak <= 0) {
+            Toast.makeText(this, "Jumlah masak harus lebih dari 0", Toast.LENGTH_SHORT).show()
+            return
+        }
 
-    // =========================
-    // CLEAR FORM
-    // =========================
-    private fun clearForm() {
-        etJumlah.setText("")
-        etCatatan.setText("")
+        val saved = db.insertProduksi(produk.id, jumlahMasak, tanggal, catatan)
+        if (saved) {
+            val hasil = jumlahMasak * db.getParameterAktif(produk.id)
+            Toast.makeText(this, "Produksi tersimpan: $hasil ${produk.satuan}", Toast.LENGTH_SHORT).show()
+            etJumlahMasak.setText("")
+            etCatatan.setText("")
+        } else {
+            Toast.makeText(this, "Gagal menyimpan produksi", Toast.LENGTH_SHORT).show()
+        }
     }
 }

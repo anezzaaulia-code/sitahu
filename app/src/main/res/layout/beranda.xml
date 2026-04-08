@@ -1,786 +1,334 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scrollHome"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F6F2EA">
+    android:background="@drawable/bg_app_screen"
+    android:clipToPadding="false"
+    android:fillViewport="true"
+    android:paddingBottom="20dp">
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/scrollContent"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/bottomNav"
-        android:fillViewport="true">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Beranda"
+            android:textColor="@color/text_primary"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvHomeSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Admin / Pemilik"
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/bg_summary_panel"
             android:orientation="vertical"
-            android:paddingBottom="12dp">
+            android:padding="18dp">
 
-            <!-- Header -->
+            <TextView
+                android:id="@+id/tvHomeSummaryTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Laba hari ini"
+                android:textColor="#E6FFFFFF"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tvHomeSummaryTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Rp0"
+                android:textColor="@android:color/white"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
+                android:layout_marginTop="14dp"
                 android:orientation="horizontal"
-                android:paddingStart="16dp"
-                android:paddingTop="16dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="12dp">
+                android:weightSum="2">
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="42dp"
-                    android:layout_height="42dp"
-                    app:cardBackgroundColor="#F4EFE6"
-                    app:cardCornerRadius="21dp"
-                    app:cardElevation="0dp">
-
-                    <ImageButton
-                        android:id="@+id/btnBack"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/transparent"
-                        android:contentDescription="Kembali"
-                        android:padding="10dp"
-                        android:src="@android:drawable/ic_media_previous" />
-                </androidx.cardview.widget.CardView>
-
-                <LinearLayout
+                <TextView
+                    android:id="@+id/tvHomeSummary1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="6dp"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:background="@drawable/bg_mini_card"
+                    android:padding="12dp"
+                    android:text="Pemasukan hari ini: Rp0"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp" />
 
-                    <TextView
-                        android:id="@+id/tvTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Beranda"
-                        android:textColor="#2F342B"
-                        android:textSize="24sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tvSubtitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:text="Ringkasan usaha hari ini"
-                        android:textColor="#6E6A60"
-                        android:textSize="15sp" />
-                </LinearLayout>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="42dp"
-                    android:layout_height="42dp"
-                    app:cardBackgroundColor="#F4EFE6"
-                    app:cardCornerRadius="21dp"
-                    app:cardElevation="0dp">
-
-                    <ImageButton
-                        android:id="@+id/btnNotif"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/transparent"
-                        android:contentDescription="Notifikasi"
-                        android:padding="10dp"
-                        android:src="@android:drawable/ic_dialog_info" />
-                </androidx.cardview.widget.CardView>
+                <TextView
+                    android:id="@+id/tvHomeSummary4"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_mini_card"
+                    android:padding="12dp"
+                    android:text="Pengeluaran hari ini: Rp0"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp" />
             </LinearLayout>
 
-            <!-- Summary Card -->
-            <androidx.cardview.widget.CardView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginEnd="16dp"
-                app:cardBackgroundColor="#78985F"
-                app:cardCornerRadius="28dp"
-                app:cardElevation="0dp">
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/tvHomeSummary2"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="18dp">
+                    android:layout_marginEnd="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_mini_card"
+                    android:padding="12dp"
+                    android:text="Produksi hari ini: 0 pcs"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp" />
 
-                    <TextView
-                        android:id="@+id/tvSummaryDate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Ringkasan 31 Maret 2026"
-                        android:textColor="#E6F0DE"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/tvSummarySales"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="Rp 39.000"
-                        android:textColor="@android:color/white"
-                        android:textSize="26sp"
-                        android:textStyle="bold" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="14dp"
-                        android:orientation="vertical">
-
-                        <!-- Row 1 -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:weightSum="2">
-
-                            <androidx.cardview.widget.CardView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                app:cardBackgroundColor="#88A370"
-                                app:cardCornerRadius="18dp"
-                                app:cardElevation="0dp">
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:padding="14dp">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Produksi"
-                                        android:textColor="#EAF4E2"
-                                        android:textSize="13sp" />
-
-                                    <TextView
-                                        android:id="@+id/tvSummaryProduction"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="6dp"
-                                        android:text="98 pcs"
-                                        android:textColor="@android:color/white"
-                                        android:textSize="20sp"
-                                        android:textStyle="bold" />
-                                </LinearLayout>
-                            </androidx.cardview.widget.CardView>
-
-                            <Space
-                                android:layout_width="12dp"
-                                android:layout_height="1dp" />
-
-                            <androidx.cardview.widget.CardView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                app:cardBackgroundColor="#88A370"
-                                app:cardCornerRadius="18dp"
-                                app:cardElevation="0dp">
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:padding="14dp">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Pengeluaran"
-                                        android:textColor="#EAF4E2"
-                                        android:textSize="13sp" />
-
-                                    <TextView
-                                        android:id="@+id/tvSummaryExpenses"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="6dp"
-                                        android:text="Rp 200.000"
-                                        android:textColor="@android:color/white"
-                                        android:textSize="20sp"
-                                        android:textStyle="bold" />
-                                </LinearLayout>
-                            </androidx.cardview.widget.CardView>
-                        </LinearLayout>
-
-                        <!-- Row 2 -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
-                            android:orientation="horizontal"
-                            android:weightSum="2">
-
-                            <androidx.cardview.widget.CardView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                app:cardBackgroundColor="#88A370"
-                                app:cardCornerRadius="18dp"
-                                app:cardElevation="0dp">
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:padding="14dp">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Transaksi"
-                                        android:textColor="#EAF4E2"
-                                        android:textSize="13sp" />
-
-                                    <TextView
-                                        android:id="@+id/tvSummaryTransactions"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="6dp"
-                                        android:text="3"
-                                        android:textColor="@android:color/white"
-                                        android:textSize="20sp"
-                                        android:textStyle="bold" />
-                                </LinearLayout>
-                            </androidx.cardview.widget.CardView>
-
-                            <Space
-                                android:layout_width="12dp"
-                                android:layout_height="1dp" />
-
-                            <androidx.cardview.widget.CardView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                app:cardBackgroundColor="#88A370"
-                                app:cardCornerRadius="18dp"
-                                app:cardElevation="0dp">
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:padding="14dp">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Laba Sementara"
-                                        android:textColor="#EAF4E2"
-                                        android:textSize="13sp" />
-
-                                    <TextView
-                                        android:id="@+id/tvSummaryProfit"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="6dp"
-                                        android:text="-Rp 161.000"
-                                        android:textColor="@android:color/white"
-                                        android:textSize="20sp"
-                                        android:textStyle="bold" />
-                                </LinearLayout>
-                            </androidx.cardview.widget.CardView>
-                        </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- Aksi Cepat -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                app:cardBackgroundColor="#FBFAF7"
-                app:cardCornerRadius="24dp"
-                app:cardElevation="0dp"
-                app:cardUseCompatPadding="true">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/tvHomeSummary3"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Aksi cepat"
-                            android:textColor="#35352F"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Klik untuk pindah modul"
-                            android:textColor="#6F6A61"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-
-                    <!-- Row 1 -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="14dp"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
-
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/btnGoProduction"
-                            android:layout_width="0dp"
-                            android:layout_height="120dp"
-                            android:layout_weight="1"
-                            android:clickable="true"
-                            android:focusable="true"
-                            app:cardBackgroundColor="#F4F0E9"
-                            app:cardCornerRadius="18dp"
-                            app:cardElevation="0dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:gravity="center"
-                                android:orientation="vertical"
-                                android:padding="12dp">
-
-                                <TextView
-                                    android:layout_width="48dp"
-                                    android:layout_height="48dp"
-                                    android:gravity="center"
-                                    android:background="#E7EDD9"
-                                    android:text="🏭"
-                                    android:textSize="22sp" />
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="10dp"
-                                    android:gravity="center"
-                                    android:maxLines="2"
-                                    android:text="Produksi dasar"
-                                    android:textAlignment="center"
-                                    android:textColor="#35352F"
-                                    android:textSize="15sp"
-                                    android:textStyle="bold" />
-                            </LinearLayout>
-                        </androidx.cardview.widget.CardView>
-
-                        <Space
-                            android:layout_width="12dp"
-                            android:layout_height="1dp" />
-
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/btnGoSales"
-                            android:layout_width="0dp"
-                            android:layout_height="120dp"
-                            android:layout_weight="1"
-                            android:clickable="true"
-                            android:focusable="true"
-                            app:cardBackgroundColor="#F4F0E9"
-                            app:cardCornerRadius="18dp"
-                            app:cardElevation="0dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:gravity="center"
-                                android:orientation="vertical"
-                                android:padding="12dp">
-
-                                <TextView
-                                    android:layout_width="48dp"
-                                    android:layout_height="48dp"
-                                    android:gravity="center"
-                                    android:background="#F4DFD3"
-                                    android:text="🧾"
-                                    android:textSize="22sp" />
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="10dp"
-                                    android:gravity="center"
-                                    android:maxLines="2"
-                                    android:text="Rekap pasar"
-                                    android:textAlignment="center"
-                                    android:textColor="#35352F"
-                                    android:textSize="15sp"
-                                    android:textStyle="bold" />
-                            </LinearLayout>
-                        </androidx.cardview.widget.CardView>
-                    </LinearLayout>
-
-                    <!-- Row 2 -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
-
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/btnGoStock"
-                            android:layout_width="0dp"
-                            android:layout_height="120dp"
-                            android:layout_weight="1"
-                            android:clickable="true"
-                            android:focusable="true"
-                            app:cardBackgroundColor="#F4F0E9"
-                            app:cardCornerRadius="18dp"
-                            app:cardElevation="0dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:gravity="center"
-                                android:orientation="vertical"
-                                android:padding="12dp">
-
-                                <TextView
-                                    android:layout_width="48dp"
-                                    android:layout_height="48dp"
-                                    android:gravity="center"
-                                    android:background="#D6E7F1"
-                                    android:text="📦"
-                                    android:textSize="22sp" />
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="10dp"
-                                    android:gravity="center"
-                                    android:maxLines="2"
-                                    android:text="Stok"
-                                    android:textAlignment="center"
-                                    android:textColor="#35352F"
-                                    android:textSize="15sp"
-                                    android:textStyle="bold" />
-                            </LinearLayout>
-                        </androidx.cardview.widget.CardView>
-
-                        <Space
-                            android:layout_width="12dp"
-                            android:layout_height="1dp" />
-
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/btnNewExpense"
-                            android:layout_width="0dp"
-                            android:layout_height="120dp"
-                            android:layout_weight="1"
-                            android:clickable="true"
-                            android:focusable="true"
-                            app:cardBackgroundColor="#F4F0E9"
-                            app:cardCornerRadius="18dp"
-                            app:cardElevation="0dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:gravity="center"
-                                android:orientation="vertical"
-                                android:padding="12dp">
-
-                                <TextView
-                                    android:layout_width="48dp"
-                                    android:layout_height="48dp"
-                                    android:gravity="center"
-                                    android:background="#F0DDD0"
-                                    android:text="💸"
-                                    android:textSize="22sp" />
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="10dp"
-                                    android:gravity="center"
-                                    android:maxLines="2"
-                                    android:text="Pengeluaran"
-                                    android:textAlignment="center"
-                                    android:textColor="#35352F"
-                                    android:textSize="15sp"
-                                    android:textStyle="bold" />
-                            </LinearLayout>
-                        </androidx.cardview.widget.CardView>
-                    </LinearLayout>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- Stok Kritis -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                app:cardBackgroundColor="#FBFAF7"
-                app:cardCornerRadius="24dp"
-                app:cardElevation="0dp"
-                app:cardUseCompatPadding="true">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Stok kritis"
-                            android:textColor="#35352F"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/tvLowStockCount"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0 produk perlu perhatian"
-                            android:textColor="#6F6A61"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="14dp"
-                        android:background="#F2EEE8"
-                        android:orientation="vertical"
-                        android:padding="18dp">
-
-                        <TextView
-                            android:id="@+id/tvLowStockEmpty"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="Semua stok aman. Tidak ada produk kritis."
-                            android:textColor="#6F6A61"
-                            android:textSize="15sp" />
-                    </LinearLayout>
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rvLowStock"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:nestedScrollingEnabled="false"
-                        android:visibility="gone" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- Transaksi Terbaru -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                app:cardBackgroundColor="#FBFAF7"
-                app:cardCornerRadius="24dp"
-                app:cardElevation="0dp"
-                app:cardUseCompatPadding="true">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Transaksi terbaru"
-                        android:textColor="#35352F"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rvRecentTransactions"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:nestedScrollingEnabled="false" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
+                    android:layout_marginStart="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_mini_card"
+                    android:padding="12dp"
+                    android:text="Total stok: 0 pcs"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp" />
+            </LinearLayout>
         </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
-
-    <!-- Bottom Navigation -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/bottomNav"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="12dp"
-        app:cardBackgroundColor="#FBFAF7"
-        app:cardCornerRadius="28dp"
-        app:cardElevation="2dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:layout_marginTop="14dp"
             android:orientation="horizontal"
-            android:padding="10dp"
-            android:weightSum="5">
+            android:weightSum="2">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/navBeranda"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardProduksi"
                 android:layout_width="0dp"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="6dp"
                 android:layout_weight="1"
-                app:cardBackgroundColor="#78985F"
+                app:cardBackgroundColor="@color/card_surface"
                 app:cardCornerRadius="20dp"
-                app:cardElevation="0dp">
+                app:strokeColor="@color/line_soft"
+                app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:padding="6dp">
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="14dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="🏠"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/bg_badge_green"
+                        android:gravity="center"
+                        android:text="🏭"
                         android:textSize="18sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Beranda"
-                        android:textColor="@android:color/white"
-                        android:textSize="11sp"
+                        android:layout_marginStart="10dp"
+                        android:text="Produksi"
+                        android:textColor="@color/text_primary"
                         android:textStyle="bold" />
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
-            <LinearLayout
-                android:id="@+id/navProduksi"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardPenjualan"
                 android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_marginStart="8dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="6dp">
+                app:cardBackgroundColor="@color/card_surface"
+                app:cardCornerRadius="20dp"
+                app:strokeColor="@color/line_soft"
+                app:strokeWidth="1dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="🏭"
-                    android:textSize="18sp" />
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="14dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Produksi"
-                    android:textColor="#4B4B44"
-                    android:textSize="11sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                    <TextView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/bg_badge_gold"
+                        android:gravity="center"
+                        android:text="🛒"
+                        android:textSize="18sp" />
 
-            <LinearLayout
-                android:id="@+id/navPenjualan"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_marginStart="8dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="6dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="🛒"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Penjualan"
-                    android:textColor="#4B4B44"
-                    android:textSize="11sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/navStok"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_marginStart="8dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="6dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="📦"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Stok"
-                    android:textColor="#4B4B44"
-                    android:textSize="11sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/navMenu"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_marginStart="8dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="6dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="☰"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Menu"
-                    android:textColor="#4B4B44"
-                    android:textSize="11sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="Penjualan"
+                        android:textColor="@color/text_primary"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
 
-</RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardStok"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="6dp"
+                android:layout_weight="1"
+                app:cardBackgroundColor="@color/card_surface"
+                app:cardCornerRadius="20dp"
+                app:strokeColor="@color/line_soft"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="14dp">
+
+                    <TextView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/bg_badge_blue"
+                        android:gravity="center"
+                        android:text="📦"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="Stok"
+                        android:textColor="@color/text_primary"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_weight="1"
+                app:cardBackgroundColor="@color/card_surface"
+                app:cardCornerRadius="20dp"
+                app:strokeColor="@color/line_soft"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="14dp">
+
+                    <TextView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/bg_badge_orange"
+                        android:gravity="center"
+                        android:text="💸"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="Pengeluaran"
+                        android:textColor="@color/text_primary"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Stok menipis"
+            android:textColor="@color/text_primary"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/layoutLowStock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical" />
+
+        <TextView
+            android:id="@+id/tvLowStockEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/bg_dashed_border"
+            android:gravity="center"
+            android:padding="18dp"
+            android:text=""
+            android:textColor="@color/text_muted"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Pemasukan terbaru"
+            android:textColor="@color/text_primary"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/layoutRecentTransactions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical" />
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

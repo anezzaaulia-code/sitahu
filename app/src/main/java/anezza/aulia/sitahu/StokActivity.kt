@@ -2,94 +2,58 @@ package anezza.aulia.sitahu
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.*
+import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import anezza.aulia.sitahu.database.DatabaseHelper
 
 class StokActivity : AppCompatActivity() {
 
-    lateinit var db: DatabaseHelper
+    private lateinit var db: DatabaseHelper
+    private lateinit var rvStok: RecyclerView
+    private lateinit var tvEmpty: TextView
+    private lateinit var tvRingkasan: TextView
 
-    lateinit var tvNama1: TextView
-    lateinit var tvStok1: TextView
-    lateinit var tvStatus1: TextView
-
-    lateinit var tvNama2: TextView
-    lateinit var tvStok2: TextView
-    lateinit var tvStatus2: TextView
-
-    lateinit var btnDetail1: LinearLayout
-    lateinit var btnDetail2: LinearLayout
-
-    lateinit var listProduk: List<Produk>
+    private val listProduk = mutableListOf<Produk>()
+    private lateinit var adapter: StockAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stok)
 
         db = DatabaseHelper(this)
+        rvStok = findViewById(R.id.rvStok)
+        tvEmpty = findViewById(R.id.tvEmptyStok)
+        tvRingkasan = findViewById(R.id.tvRingkasanStok)
+        findViewById<View>(R.id.btnBack).setOnClickListener { finish() }
 
-        initView()
-        loadData()
-        setupClick()
+        adapter = StockAdapter(listProduk) { produk ->
+            startActivity(Intent(this, DetailStokActivity::class.java).putExtra("produk_id", produk.id))
+        }
+        rvStok.layoutManager = LinearLayoutManager(this)
+        rvStok.adapter = adapter
+
+        AppNavigator.setupBottomNav(this, AppNavigator.Tab.STOK)
     }
 
-    private fun initView() {
-        tvNama1 = findViewById(R.id.tvNamaProduk1)
-        tvStok1 = findViewById(R.id.tvStokProduk1)
-        tvStatus1 = findViewById(R.id.tvStatusProduk1)
-
-        tvNama2 = findViewById(R.id.tvNamaProduk2)
-        tvStok2 = findViewById(R.id.tvStokProduk2)
-        tvStatus2 = findViewById(R.id.tvStatusProduk2)
-
-        btnDetail1 = findViewById(R.id.itemTahuPutih)
-        btnDetail2 = findViewById(R.id.itemTahuKuning)
+    override fun onResume() {
+        super.onResume()
+        loadData()
     }
 
     private fun loadData() {
-        listProduk = db.getAllProduk()
-
-        if (listProduk.size >= 2) {
-            val p1 = listProduk[0]
-            val p2 = listProduk[1]
-
-            setProdukUI(p1, tvNama1, tvStok1, tvStatus1)
-            setProdukUI(p2, tvNama2, tvStok2, tvStatus2)
+        listProduk.clear()
+        listProduk.addAll(db.getAllProduk())
+        adapter.notifyDataSetChanged()
+        val isEmpty = listProduk.isEmpty()
+        tvEmpty.visibility = if (isEmpty) View.VISIBLE else View.GONE
+        rvStok.visibility = if (isEmpty) View.GONE else View.VISIBLE
+        tvRingkasan.text = if (isEmpty) {
+            "Belum ada produk tersimpan."
+        } else {
+            "Total stok tersimpan ${db.getTotalStok()} unit dari ${listProduk.size} produk."
         }
-    }
-
-    private fun setProdukUI(
-        produk: Produk,
-        tvNama: TextView,
-        tvStok: TextView,
-        tvStatus: TextView
-    ) {
-        tvNama.text = produk.nama
-        tvStok.text = "Stok ${produk.stokSaatIni} pcs • Minimum ${produk.stokMinimum}"
-
-        val status = when {
-            produk.stokSaatIni <= 0 -> "Habis"
-            produk.stokSaatIni <= produk.stokMinimum -> "Menipis"
-            else -> "Aman"
-        }
-
-        tvStatus.text = status
-    }
-
-    private fun setupClick() {
-        btnDetail1.setOnClickListener {
-            openDetail(listProduk[0].id)
-        }
-
-        btnDetail2.setOnClickListener {
-            openDetail(listProduk[1].id)
-        }
-    }
-
-    private fun openDetail(produkId: Int) {
-        val intent = Intent(this, DetailStokActivity::class.java)
-        intent.putExtra("produk_id", produkId)
-        startActivity(intent)
     }
 }

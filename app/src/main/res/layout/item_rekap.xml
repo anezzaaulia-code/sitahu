@@ -1,35 +1,64 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="12dp"
-    android:background="@android:drawable/editbox_background"
-    android:layout_marginBottom="8dp">
+    android:layout_marginBottom="10dp"
+    app:cardBackgroundColor="@color/soft_fill_2"
+    app:cardCornerRadius="20dp"
+    app:strokeColor="@color/line_soft"
+    app:strokeWidth="1dp">
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="14dp">
 
         <TextView
-            android:id="@+id/tvNamaProduk"
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_badge_gold"
+            android:gravity="center"
+            android:text="🧾"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:text="Produk"/>
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvNamaProduk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Produk"
+                android:textColor="@color/text_primary"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvJumlah"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Jumlah"
+                android:textColor="@color/text_secondary" />
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/tvJumlah"
+            android:id="@+id/tvSubtotal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Jumlah"/>
+            android:background="@drawable/bg_badge_green"
+            android:paddingLeft="10dp"
+            android:paddingTop="6dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="6dp"
+            android:text="Rp 0"
+            android:textColor="@color/green_text"
+            android:textStyle="bold" />
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/tvSubtotal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Rp 0"
-        android:textStyle="bold"/>
-</LinearLayout>
+</com.google.android.material.card.MaterialCardView>

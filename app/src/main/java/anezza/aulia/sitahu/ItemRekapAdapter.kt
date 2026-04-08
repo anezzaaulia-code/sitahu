@@ -18,22 +18,17 @@ class ItemRekapAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_rekap, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_rekap, parent, false)
         return ViewHolder(view)
     }
 
-    override fun getItemCount(): Int = list.size
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = list[position]
-
         holder.tvNama.text = item.namaProduk
-        holder.tvJumlah.text = "${item.jumlah} pcs"
-        holder.tvSubtotal.text = "Rp ${item.subtotal}"
-
-        holder.itemView.setOnClickListener {
-            onClick(position)
-        }
+        holder.tvJumlah.text = "${item.jumlah} item"
+        holder.tvSubtotal.text = FormatHelper.rupiah(item.subtotal)
+        holder.itemView.setOnClickListener { onClick(position) }
     }
+
+    override fun getItemCount(): Int = list.size
 }
