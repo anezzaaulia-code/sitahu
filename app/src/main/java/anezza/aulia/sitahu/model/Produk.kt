@@ -8,5 +8,6 @@ data class Produk(
     val stokMinimum: Int,
     val hargaJual: Int,
     val dibuatPada: String = "",
-    val diubahPada: String = ""
+    val diubahPada: String = "",
+    val aktif: Boolean = true
 )

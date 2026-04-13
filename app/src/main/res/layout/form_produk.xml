@@ -49,7 +49,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Simpan produk dengan tampilan seperti prototype"
+                    android:text="Simpan produk beserta status aktif atau nonaktif"
                     android:textColor="@color/text_secondary"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -74,7 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:text="Isi nama, satuan, stok, harga, dan hasil per masak."
+                android:text="Gunakan RadioButton untuk menentukan produk aktif atau nonaktif."
                 android:textColor="@color/text_secondary"
                 android:textSize="13sp" />
         </LinearLayout>
@@ -87,23 +87,136 @@
             android:orientation="vertical"
             android:padding="18dp">
 
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Nama produk" android:textColor="@color/text_secondary" android:textStyle="bold" />
-            <EditText android:id="@+id/etNama" android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginTop="8dp" android:background="@drawable/bg_input_xml" android:paddingHorizontal="14dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nama produk"
+                android:textColor="@color/text_secondary"
+                android:textStyle="bold" />
 
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="14dp" android:text="Satuan" android:textColor="@color/text_secondary" android:textStyle="bold" />
-            <EditText android:id="@+id/etSatuan" android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginTop="8dp" android:background="@drawable/bg_input_xml" android:paddingHorizontal="14dp" />
+            <EditText
+                android:id="@+id/etNama"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_input_xml"
+                android:paddingHorizontal="14dp" />
 
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="14dp" android:text="Stok awal / saat ini" android:textColor="@color/text_secondary" android:textStyle="bold" />
-            <EditText android:id="@+id/etStok" android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginTop="8dp" android:background="@drawable/bg_input_xml" android:inputType="number" android:paddingHorizontal="14dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="Status produk"
+                android:textColor="@color/text_secondary"
+                android:textStyle="bold" />
 
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="14dp" android:text="Stok minimum" android:textColor="@color/text_secondary" android:textStyle="bold" />
-            <EditText android:id="@+id/etMin" android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginTop="8dp" android:background="@drawable/bg_input_xml" android:inputType="number" android:paddingHorizontal="14dp" />
+            <RadioGroup
+                android:id="@+id/rgStatusProduk"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
 
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="14dp" android:text="Harga jual" android:textColor="@color/text_secondary" android:textStyle="bold" />
-            <EditText android:id="@+id/etHarga" android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginTop="8dp" android:background="@drawable/bg_input_xml" android:inputType="number" android:paddingHorizontal="14dp" />
+                <RadioButton
+                    android:id="@+id/rbProdukAktif"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="Aktif"
+                    android:textColor="@color/text_primary" />
 
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="14dp" android:text="Hasil per masak" android:textColor="@color/text_secondary" android:textStyle="bold" />
-            <EditText android:id="@+id/etHasilPerMasak" android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginTop="8dp" android:background="@drawable/bg_input_xml" android:inputType="number" android:paddingHorizontal="14dp" />
+                <RadioButton
+                    android:id="@+id/rbProdukNonaktif"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="Nonaktif"
+                    android:textColor="@color/text_primary" />
+            </RadioGroup>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="Satuan"
+                android:textColor="@color/text_secondary"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/etSatuan"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_input_xml"
+                android:paddingHorizontal="14dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="Stok awal / saat ini"
+                android:textColor="@color/text_secondary"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/etStok"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_input_xml"
+                android:inputType="number"
+                android:paddingHorizontal="14dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="Stok minimum"
+                android:textColor="@color/text_secondary"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/etMin"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_input_xml"
+                android:inputType="number"
+                android:paddingHorizontal="14dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="Harga jual"
+                android:textColor="@color/text_secondary"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/etHarga"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_input_xml"
+                android:inputType="number"
+                android:paddingHorizontal="14dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="Hasil per masak"
+                android:textColor="@color/text_secondary"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/etHasilPerMasak"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_input_xml"
+                android:inputType="number"
+                android:paddingHorizontal="14dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSimpan"
@@ -111,11 +224,11 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/bg_button_primary"
-                app:backgroundTint="@null"
                 android:text="Simpan Produk"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                app:backgroundTint="@null" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>
