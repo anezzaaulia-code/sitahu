@@ -89,7 +89,7 @@ class HomeFragment : BaseScreenFragment(R.layout.beranda) {
     private fun renderLowStock(helper: DatabaseHelper) {
         val container = layoutLowStock ?: return
         container.removeAllViews()
-        val lowStock = helper.getAllProduk()
+        val lowStock = helper.getActiveProduk()
             .filter { it.stokSaatIni <= it.stokMinimum }
             .sortedBy { it.stokSaatIni }
             .take(4)

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
 import anezza.aulia.sitahu.database.DatabaseHelper
@@ -18,6 +19,8 @@ class ProductFormFragment : BaseScreenFragment(R.layout.form_produk) {
     private var etMin: EditText? = null
     private var etHarga: EditText? = null
     private var etHasilPerMasak: EditText? = null
+    private var rbAktif: RadioButton? = null
+    private var rbNonaktif: RadioButton? = null
     private var btnSimpan: Button? = null
     private var editingId: Int = 0
 
@@ -38,10 +41,14 @@ class ProductFormFragment : BaseScreenFragment(R.layout.form_produk) {
         etMin = view.findViewById(R.id.etMin)
         etHarga = view.findViewById(R.id.etHarga)
         etHasilPerMasak = view.findViewById(R.id.etHasilPerMasak)
+        rbAktif = view.findViewById(R.id.rbProdukAktif)
+        rbNonaktif = view.findViewById(R.id.rbProdukNonaktif)
         btnSimpan = view.findViewById(R.id.btnSimpan)
         btnSimpan?.setOnClickListener { saveProduk() }
         if (editingId > 0) {
             tvTitle?.text = "Ubah Produk"
+        } else {
+            rbAktif?.isChecked = true
         }
     }
 
@@ -58,6 +65,8 @@ class ProductFormFragment : BaseScreenFragment(R.layout.form_produk) {
         etMin?.setText(produk.stokMinimum.toString())
         etHarga?.setText(produk.hargaJual.toString())
         etHasilPerMasak?.setText(helper.getParameterAktif(produkId).toString())
+        rbAktif?.isChecked = produk.aktif
+        rbNonaktif?.isChecked = !produk.aktif
     }
 
     private fun saveProduk() {
@@ -68,6 +77,7 @@ class ProductFormFragment : BaseScreenFragment(R.layout.form_produk) {
         val stokMinimum = etMin?.text?.toString()?.trim()?.toIntOrNull()
         val hargaJual = etHarga?.text?.toString()?.trim()?.toIntOrNull()
         val hasilPerMasak = etHasilPerMasak?.text?.toString()?.trim()?.toIntOrNull()
+        val aktif = rbAktif?.isChecked == true
 
         if (nama.isEmpty() || satuan.isEmpty()) {
             Toast.makeText(requireContext(), "Nama dan satuan wajib diisi", Toast.LENGTH_SHORT).show()
@@ -88,7 +98,8 @@ class ProductFormFragment : BaseScreenFragment(R.layout.form_produk) {
             satuan = satuan,
             stokSaatIni = stok,
             stokMinimum = stokMinimum,
-            hargaJual = hargaJual
+            hargaJual = hargaJual,
+            aktif = aktif
         )
 
         val success = if (editingId > 0) {

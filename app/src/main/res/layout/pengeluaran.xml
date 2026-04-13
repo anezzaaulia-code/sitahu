@@ -46,7 +46,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Catat biaya operasional usaha"
+                android:text="Cari dan kelola biaya operasional"
                 android:textColor="@color/text_secondary"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -56,13 +56,13 @@
             android:layout_width="wrap_content"
             android:layout_height="44dp"
             android:background="@drawable/bg_button_primary"
-                app:backgroundTint="@null"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:text="+ Tambah"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:backgroundTint="@null" />
     </LinearLayout>
 
     <LinearLayout
@@ -92,6 +92,36 @@
             android:textStyle="bold" />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/bg_panel_soft"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pencarian pengeluaran"
+            android:textColor="@color/text_secondary"
+            android:textStyle="bold" />
+
+        <AutoCompleteTextView
+            android:id="@+id/actvCariPengeluaran"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_input_xml"
+            android:completionThreshold="1"
+            android:hint="Cari nama pengeluaran"
+            android:paddingHorizontal="14dp"
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_secondary" />
+    </LinearLayout>
+
     <TextView
         android:id="@+id/tvEmptyPengeluaran"
         android:layout_width="match_parent"
@@ -106,8 +136,8 @@
         android:textColor="@color/text_secondary"
         android:visibility="gone" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvPengeluaran"
+    <ListView
+        android:id="@+id/lvPengeluaran"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
@@ -115,5 +145,8 @@
         android:layout_marginEnd="16dp"
         android:layout_weight="1"
         android:clipToPadding="false"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp"
+        android:listSelector="@android:color/transparent"
         android:paddingBottom="18dp" />
 </LinearLayout>

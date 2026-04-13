@@ -1,5 +1,6 @@
 package anezza.aulia.sitahu
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -35,6 +36,7 @@ class MainActivity : AppCompatActivity(), MainHost {
 
         if (savedInstanceState == null) {
             switchTabInternal(currentTab)
+            handleIntentNavigation(intent)
         } else {
             if (bottomNavigation.selectedItemId != currentTab.menuId) {
                 ignoreNavigationCallback = true
@@ -81,6 +83,27 @@ class MainActivity : AppCompatActivity(), MainHost {
             }.also { bottomCard.layoutParams = it }
 
             insets
+        }
+    }
+
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleIntentNavigation(intent)
+    }
+
+    private fun handleIntentNavigation(intent: Intent?) {
+        when (intent?.getStringExtra(EXTRA_OPEN_TARGET)) {
+            TARGET_PRODUK -> {
+                switchToTab(RootTab.MENU)
+                openProdukList()
+            }
+            TARGET_PENGELUARAN -> {
+                switchToTab(RootTab.MENU)
+                openPengeluaranList()
+            }
+            TARGET_STOK -> switchToTab(RootTab.STOK)
         }
     }
 
@@ -223,5 +246,9 @@ class MainActivity : AppCompatActivity(), MainHost {
 
     companion object {
         private const val KEY_CURRENT_TAB = "current_tab"
+        const val EXTRA_OPEN_TARGET = "open_target"
+        const val TARGET_PRODUK = "target_produk"
+        const val TARGET_PENGELUARAN = "target_pengeluaran"
+        const val TARGET_STOK = "target_stok"
     }
 }

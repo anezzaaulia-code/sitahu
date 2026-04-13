@@ -13,122 +13,150 @@ import java.text.NumberFormat
 import java.util.Locale
 
 class DatabaseHelper(context: Context) :
-    SQLiteOpenHelper(context, "sitahu.db", null, 7) {
+    SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     override fun onCreate(db: SQLiteDatabase) {
         createTables(db)
+        ensureSchema(db)
+        normalizeLegacyDateColumns(db)
+    }
+
+    override fun onOpen(db: SQLiteDatabase) {
+        super.onOpen(db)
+        ensureSchema(db)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        if (oldVersion < 5) {
-            ensureColumnExists(db, "produk", "is_deleted", "INTEGER NOT NULL DEFAULT 0")
-            ensureColumnExists(db, "pengeluaran", "is_deleted", "INTEGER NOT NULL DEFAULT 0")
-        }
-        if (oldVersion < 6) {
-            normalizeLegacyDateColumns(db)
-        }
-        if (oldVersion < 7) {
-            ensureColumnExists(db, "pengeluaran", "nama_pengeluaran", "TEXT")
-            db.execSQL(
-                "UPDATE pengeluaran SET nama_pengeluaran = kategori WHERE (nama_pengeluaran IS NULL OR TRIM(nama_pengeluaran) = '') AND kategori IS NOT NULL"
-            )
-        }
+        ensureSchema(db)
+        normalizeLegacyDateColumns(db)
     }
 
     private fun createTables(db: SQLiteDatabase) {
-        db.execSQL(
-            """
-            CREATE TABLE produk (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                nama TEXT NOT NULL,
-                satuan TEXT NOT NULL,
-                stok_saat_ini INTEGER NOT NULL DEFAULT 0,
-                stok_minimum INTEGER NOT NULL DEFAULT 0,
-                harga_jual INTEGER NOT NULL DEFAULT 0,
-                dibuat_pada TEXT,
-                diubah_pada TEXT,
-                is_deleted INTEGER NOT NULL DEFAULT 0
+        listOf(
+            CREATE_TABLE_PRODUK,
+            CREATE_TABLE_PARAMETER_PRODUKSI,
+            CREATE_TABLE_PRODUKSI,
+            CREATE_TABLE_PENJUALAN,
+            CREATE_TABLE_ITEM_PENJUALAN,
+            CREATE_TABLE_MUTASI_STOK,
+            CREATE_TABLE_PENGELUARAN
+        ).forEach { safeExec(db, it) }
+    }
+
+    private fun ensureSchema(db: SQLiteDatabase) {
+        createTables(db)
+
+        ensureColumns(
+            db,
+            "produk",
+            linkedMapOf(
+                "nama" to "TEXT NOT NULL DEFAULT ''",
+                "satuan" to "TEXT NOT NULL DEFAULT ''",
+                "stok_saat_ini" to "INTEGER NOT NULL DEFAULT 0",
+                "stok_minimum" to "INTEGER NOT NULL DEFAULT 0",
+                "harga_jual" to "INTEGER NOT NULL DEFAULT 0",
+                "dibuat_pada" to "TEXT",
+                "diubah_pada" to "TEXT",
+                "aktif" to "INTEGER NOT NULL DEFAULT 1",
+                "is_deleted" to "INTEGER NOT NULL DEFAULT 0"
             )
-            """.trimIndent()
+        )
+        ensureColumns(
+            db,
+            "parameter_produksi",
+            linkedMapOf(
+                "produk_id" to "INTEGER NOT NULL DEFAULT 0",
+                "hasil_per_masak" to "INTEGER NOT NULL DEFAULT 1",
+                "aktif" to "INTEGER NOT NULL DEFAULT 1"
+            )
+        )
+        ensureColumns(
+            db,
+            "produksi",
+            linkedMapOf(
+                "produk_id" to "INTEGER NOT NULL DEFAULT 0",
+                "tanggal_produksi" to "TEXT NOT NULL DEFAULT ''",
+                "jumlah_masak" to "INTEGER NOT NULL DEFAULT 0",
+                "jumlah_hasil" to "INTEGER NOT NULL DEFAULT 0",
+                "catatan" to "TEXT"
+            )
+        )
+        ensureColumns(
+            db,
+            "penjualan",
+            linkedMapOf(
+                "tanggal_penjualan" to "TEXT NOT NULL DEFAULT ''",
+                "total_penjualan" to "INTEGER NOT NULL DEFAULT 0",
+                "catatan" to "TEXT"
+            )
+        )
+        ensureColumns(
+            db,
+            "item_penjualan",
+            linkedMapOf(
+                "penjualan_id" to "INTEGER NOT NULL DEFAULT 0",
+                "produk_id" to "INTEGER NOT NULL DEFAULT 0",
+                "nama_produk_snapshot" to "TEXT NOT NULL DEFAULT ''",
+                "satuan_snapshot" to "TEXT NOT NULL DEFAULT ''",
+                "harga_snapshot" to "INTEGER NOT NULL DEFAULT 0",
+                "jumlah" to "INTEGER NOT NULL DEFAULT 0",
+                "subtotal" to "INTEGER NOT NULL DEFAULT 0"
+            )
+        )
+        ensureColumns(
+            db,
+            "mutasi_stok",
+            linkedMapOf(
+                "produk_id" to "INTEGER NOT NULL DEFAULT 0",
+                "jenis_referensi" to "TEXT NOT NULL DEFAULT ''",
+                "referensi_id" to "INTEGER NOT NULL DEFAULT 0",
+                "tanggal_mutasi" to "TEXT NOT NULL DEFAULT ''",
+                "arah" to "TEXT NOT NULL DEFAULT ''",
+                "jumlah" to "INTEGER NOT NULL DEFAULT 0",
+                "catatan" to "TEXT"
+            )
+        )
+        ensureColumns(
+            db,
+            "pengeluaran",
+            linkedMapOf(
+                "tanggal_pengeluaran" to "TEXT NOT NULL DEFAULT ''",
+                "nama_pengeluaran" to "TEXT NOT NULL DEFAULT ''",
+                "nominal" to "INTEGER NOT NULL DEFAULT 0",
+                "catatan" to "TEXT",
+                "is_deleted" to "INTEGER NOT NULL DEFAULT 0"
+            )
         )
 
-        db.execSQL(
-            """
-            CREATE TABLE parameter_produksi (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                produk_id INTEGER NOT NULL,
-                hasil_per_masak INTEGER NOT NULL DEFAULT 1,
-                aktif INTEGER NOT NULL DEFAULT 1
-            )
-            """.trimIndent()
-        )
+        migrateLegacyData(db)
+        backfillDefaultValues(db)
+    }
 
-        db.execSQL(
-            """
-            CREATE TABLE produksi (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                produk_id INTEGER NOT NULL,
-                tanggal_produksi TEXT NOT NULL,
-                jumlah_masak INTEGER NOT NULL,
-                jumlah_hasil INTEGER NOT NULL,
-                catatan TEXT
-            )
-            """.trimIndent()
-        )
+    private fun migrateLegacyData(db: SQLiteDatabase) {
+        copyColumnValueIfAvailable(db, "pengeluaran", "kategori", "nama_pengeluaran")
+        copyColumnValueIfAvailable(db, "pengeluaran", "keterangan", "catatan")
+    }
 
-        db.execSQL(
-            """
-            CREATE TABLE penjualan (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                tanggal_penjualan TEXT NOT NULL,
-                total_penjualan INTEGER NOT NULL,
-                catatan TEXT
-            )
-            """.trimIndent()
-        )
-
-        db.execSQL(
-            """
-            CREATE TABLE item_penjualan (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                penjualan_id INTEGER NOT NULL,
-                produk_id INTEGER NOT NULL,
-                nama_produk_snapshot TEXT NOT NULL,
-                satuan_snapshot TEXT NOT NULL,
-                harga_snapshot INTEGER NOT NULL,
-                jumlah INTEGER NOT NULL,
-                subtotal INTEGER NOT NULL
-            )
-            """.trimIndent()
-        )
-
-        db.execSQL(
-            """
-            CREATE TABLE mutasi_stok (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                produk_id INTEGER NOT NULL,
-                jenis_referensi TEXT NOT NULL,
-                referensi_id INTEGER NOT NULL,
-                tanggal_mutasi TEXT NOT NULL,
-                arah TEXT NOT NULL,
-                jumlah INTEGER NOT NULL,
-                catatan TEXT
-            )
-            """.trimIndent()
-        )
-
-        db.execSQL(
-            """
-            CREATE TABLE pengeluaran (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                tanggal_pengeluaran TEXT NOT NULL,
-                nama_pengeluaran TEXT NOT NULL,
-                nominal INTEGER NOT NULL,
-                catatan TEXT,
-                is_deleted INTEGER NOT NULL DEFAULT 0
-            )
-            """.trimIndent()
-        )
+    private fun backfillDefaultValues(db: SQLiteDatabase) {
+        safeExec(db, "UPDATE produk SET stok_saat_ini = 0 WHERE stok_saat_ini IS NULL")
+        safeExec(db, "UPDATE produk SET stok_minimum = 0 WHERE stok_minimum IS NULL")
+        safeExec(db, "UPDATE produk SET harga_jual = 0 WHERE harga_jual IS NULL")
+        safeExec(db, "UPDATE produk SET aktif = 1 WHERE aktif IS NULL")
+        safeExec(db, "UPDATE produk SET is_deleted = 0 WHERE is_deleted IS NULL")
+        safeExec(db, "UPDATE parameter_produksi SET hasil_per_masak = 1 WHERE hasil_per_masak IS NULL OR hasil_per_masak <= 0")
+        safeExec(db, "UPDATE parameter_produksi SET aktif = 1 WHERE aktif IS NULL")
+        safeExec(db, "UPDATE produksi SET jumlah_masak = 0 WHERE jumlah_masak IS NULL")
+        safeExec(db, "UPDATE produksi SET jumlah_hasil = 0 WHERE jumlah_hasil IS NULL")
+        safeExec(db, "UPDATE penjualan SET total_penjualan = 0 WHERE total_penjualan IS NULL")
+        safeExec(db, "UPDATE item_penjualan SET harga_snapshot = 0 WHERE harga_snapshot IS NULL")
+        safeExec(db, "UPDATE item_penjualan SET jumlah = 0 WHERE jumlah IS NULL")
+        safeExec(db, "UPDATE item_penjualan SET subtotal = 0 WHERE subtotal IS NULL")
+        safeExec(db, "UPDATE mutasi_stok SET referensi_id = 0 WHERE referensi_id IS NULL")
+        safeExec(db, "UPDATE mutasi_stok SET jumlah = 0 WHERE jumlah IS NULL")
+        safeExec(db, "UPDATE pengeluaran SET nominal = 0 WHERE nominal IS NULL")
+        safeExec(db, "UPDATE pengeluaran SET is_deleted = 0 WHERE is_deleted IS NULL")
+        safeExec(db, "UPDATE pengeluaran SET nama_pengeluaran = '' WHERE nama_pengeluaran IS NULL")
+        safeExec(db, "UPDATE pengeluaran SET catatan = '' WHERE catatan IS NULL")
     }
 
     fun getTotalProduk(): Int = countQuery("SELECT COUNT(*) FROM produk WHERE is_deleted=0")
@@ -142,10 +170,21 @@ class DatabaseHelper(context: Context) :
     fun getTotalPengeluaranNominal(): Long = getTotalPengeluaran().toLong()
 
     private fun countQuery(sql: String): Int {
-        val cursor = readableDatabase.rawQuery(sql, null)
-        val result = if (cursor.moveToFirst()) cursor.getInt(0) else 0
-        cursor.close()
-        return result
+        return runCatching {
+            readableDatabase.rawQuery(sql, null).use { cursor ->
+                if (cursor.moveToFirst()) cursor.getInt(0) else 0
+            }
+        }.getOrDefault(0)
+    }
+
+    private fun ensureColumns(
+        db: SQLiteDatabase,
+        tableName: String,
+        columns: Map<String, String>
+    ) {
+        columns.forEach { (columnName, definition) ->
+            ensureColumnExists(db, tableName, columnName, definition)
+        }
     }
 
     private fun ensureColumnExists(
@@ -154,21 +193,10 @@ class DatabaseHelper(context: Context) :
         columnName: String,
         columnDefinition: String
     ) {
-        val cursor = db.rawQuery("PRAGMA table_info($tableName)", null)
-        val exists = cursor.use {
-            var found = false
-            val nameIndex = it.getColumnIndex("name")
-            while (it.moveToNext()) {
-                if (nameIndex >= 0 && it.getString(nameIndex) == columnName) {
-                    found = true
-                    break
-                }
-            }
-            found
-        }
-        if (!exists) {
-            db.execSQL("ALTER TABLE $tableName ADD COLUMN $columnName $columnDefinition")
-        }
+        if (!tableExists(db, tableName)) return
+        val columns = getTableColumns(db, tableName)
+        if (columns.contains(columnName)) return
+        safeExec(db, "ALTER TABLE $tableName ADD COLUMN $columnName $columnDefinition")
     }
 
     private fun normalizeLegacyDateColumns(db: SQLiteDatabase) {
@@ -185,7 +213,9 @@ class DatabaseHelper(context: Context) :
         idColumn: String,
         columns: List<String>
     ) {
+        if (!tableExists(db, tableName) || !hasColumn(db, tableName, idColumn)) return
         columns.forEach { targetColumn ->
+            if (!hasColumn(db, tableName, targetColumn)) return@forEach
             val updates = mutableListOf<Pair<Int, String>>()
             val cursor = db.rawQuery(
                 "SELECT $idColumn, $targetColumn FROM $tableName WHERE $targetColumn IS NOT NULL AND TRIM($targetColumn) != ''",
@@ -202,14 +232,151 @@ class DatabaseHelper(context: Context) :
                 }
             }
             updates.forEach { (id, normalized) ->
-                db.update(
-                    tableName,
-                    ContentValues().apply { put(targetColumn, normalized) },
-                    "$idColumn=?",
-                    arrayOf(id.toString())
-                )
+                runCatching {
+                    db.update(
+                        tableName,
+                        ContentValues().apply { put(targetColumn, normalized) },
+                        "$idColumn=?",
+                        arrayOf(id.toString())
+                    )
+                }
             }
         }
+    }
+
+    private fun copyColumnValueIfAvailable(
+        db: SQLiteDatabase,
+        tableName: String,
+        fromColumn: String,
+        toColumn: String
+    ) {
+        if (!hasColumn(db, tableName, fromColumn) || !hasColumn(db, tableName, toColumn)) return
+        safeExec(
+            db,
+            "UPDATE $tableName SET $toColumn = $fromColumn WHERE ($toColumn IS NULL OR TRIM($toColumn) = '') AND $fromColumn IS NOT NULL AND TRIM($fromColumn) != ''"
+        )
+    }
+
+    private fun tableExists(db: SQLiteDatabase, tableName: String): Boolean {
+        return db.rawQuery(
+            "SELECT name FROM sqlite_master WHERE type='table' AND name=?",
+            arrayOf(tableName)
+        ).use { it.moveToFirst() }
+    }
+
+    private fun hasColumn(db: SQLiteDatabase, tableName: String, columnName: String): Boolean {
+        return getTableColumns(db, tableName).contains(columnName)
+    }
+
+    private fun getTableColumns(db: SQLiteDatabase, tableName: String): Set<String> {
+        if (!tableExists(db, tableName)) return emptySet()
+        val columns = mutableSetOf<String>()
+        db.rawQuery("PRAGMA table_info($tableName)", null).use { cursor ->
+            val nameIndex = cursor.getColumnIndex("name")
+            while (cursor.moveToNext()) {
+                if (nameIndex >= 0) {
+                    columns.add(cursor.getString(nameIndex))
+                }
+            }
+        }
+        return columns
+    }
+
+    private fun safeExec(db: SQLiteDatabase, sql: String) {
+        runCatching { db.execSQL(sql) }
+    }
+
+    companion object {
+        private const val DATABASE_NAME = "sitahu.db"
+        private const val DATABASE_VERSION = 10
+
+        private val CREATE_TABLE_PRODUK =
+            """
+            CREATE TABLE IF NOT EXISTS produk (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nama TEXT NOT NULL,
+                satuan TEXT NOT NULL,
+                stok_saat_ini INTEGER NOT NULL DEFAULT 0,
+                stok_minimum INTEGER NOT NULL DEFAULT 0,
+                harga_jual INTEGER NOT NULL DEFAULT 0,
+                dibuat_pada TEXT,
+                diubah_pada TEXT,
+                aktif INTEGER NOT NULL DEFAULT 1,
+                is_deleted INTEGER NOT NULL DEFAULT 0
+            )
+            """.trimIndent()
+
+        private val CREATE_TABLE_PARAMETER_PRODUKSI =
+            """
+            CREATE TABLE IF NOT EXISTS parameter_produksi (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                produk_id INTEGER NOT NULL,
+                hasil_per_masak INTEGER NOT NULL DEFAULT 1,
+                aktif INTEGER NOT NULL DEFAULT 1
+            )
+            """.trimIndent()
+
+        private val CREATE_TABLE_PRODUKSI =
+            """
+            CREATE TABLE IF NOT EXISTS produksi (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                produk_id INTEGER NOT NULL,
+                tanggal_produksi TEXT NOT NULL,
+                jumlah_masak INTEGER NOT NULL,
+                jumlah_hasil INTEGER NOT NULL,
+                catatan TEXT
+            )
+            """.trimIndent()
+
+        private val CREATE_TABLE_PENJUALAN =
+            """
+            CREATE TABLE IF NOT EXISTS penjualan (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                tanggal_penjualan TEXT NOT NULL,
+                total_penjualan INTEGER NOT NULL,
+                catatan TEXT
+            )
+            """.trimIndent()
+
+        private val CREATE_TABLE_ITEM_PENJUALAN =
+            """
+            CREATE TABLE IF NOT EXISTS item_penjualan (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                penjualan_id INTEGER NOT NULL,
+                produk_id INTEGER NOT NULL,
+                nama_produk_snapshot TEXT NOT NULL,
+                satuan_snapshot TEXT NOT NULL,
+                harga_snapshot INTEGER NOT NULL,
+                jumlah INTEGER NOT NULL,
+                subtotal INTEGER NOT NULL
+            )
+            """.trimIndent()
+
+        private val CREATE_TABLE_MUTASI_STOK =
+            """
+            CREATE TABLE IF NOT EXISTS mutasi_stok (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                produk_id INTEGER NOT NULL,
+                jenis_referensi TEXT NOT NULL,
+                referensi_id INTEGER NOT NULL,
+                tanggal_mutasi TEXT NOT NULL,
+                arah TEXT NOT NULL,
+                jumlah INTEGER NOT NULL,
+                catatan TEXT
+            )
+            """.trimIndent()
+
+        private val CREATE_TABLE_PENGELUARAN =
+            """
+            CREATE TABLE IF NOT EXISTS pengeluaran (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                tanggal_pengeluaran TEXT NOT NULL,
+                nama_pengeluaran TEXT NOT NULL,
+                nominal INTEGER NOT NULL,
+                catatan TEXT,
+                is_deleted INTEGER NOT NULL DEFAULT 0
+            )
+            """.trimIndent()
     }
 
     fun insertProduk(produk: Produk, hasilPerMasak: Int): Long {
@@ -228,6 +395,7 @@ class DatabaseHelper(context: Context) :
                     put("harga_jual", produk.hargaJual)
                     put("dibuat_pada", now)
                     put("diubah_pada", now)
+                    put("aktif", if (produk.aktif) 1 else 0)
                     put("is_deleted", 0)
                 }
             )
@@ -258,6 +426,7 @@ class DatabaseHelper(context: Context) :
                     put("stok_saat_ini", produk.stokSaatIni)
                     put("stok_minimum", produk.stokMinimum)
                     put("harga_jual", produk.hargaJual)
+                    put("aktif", if (produk.aktif) 1 else 0)
                     put("diubah_pada", FormatHelper.nowStorage())
                 },
                 "id=?",
@@ -274,148 +443,172 @@ class DatabaseHelper(context: Context) :
     }
 
     fun deleteProduk(id: Int): Boolean {
-        return writableDatabase.update(
-            "produk",
-            ContentValues().apply {
-                put("is_deleted", 1)
-                put("diubah_pada", FormatHelper.nowStorage())
-            },
-            "id=? AND is_deleted=0",
-            arrayOf(id.toString())
-        ) > 0
+        return runCatching {
+            writableDatabase.update(
+                "produk",
+                ContentValues().apply {
+                    put("is_deleted", 1)
+                    put("diubah_pada", FormatHelper.nowStorage())
+                },
+                "id=? AND is_deleted=0",
+                arrayOf(id.toString())
+            ) > 0
+        }.getOrDefault(false)
     }
 
-    fun getAllProduk(): List<Produk> {
-        val list = mutableListOf<Produk>()
-        val cursor = readableDatabase.rawQuery("SELECT * FROM produk WHERE is_deleted=0 ORDER BY nama ASC", null)
-        while (cursor.moveToNext()) {
-            list.add(
-                Produk(
-                    id = cursor.getInt(cursor.getColumnIndexOrThrow("id")),
-                    nama = cursor.getString(cursor.getColumnIndexOrThrow("nama")),
-                    satuan = cursor.getString(cursor.getColumnIndexOrThrow("satuan")),
-                    stokSaatIni = cursor.getInt(cursor.getColumnIndexOrThrow("stok_saat_ini")),
-                    stokMinimum = cursor.getInt(cursor.getColumnIndexOrThrow("stok_minimum")),
-                    hargaJual = cursor.getInt(cursor.getColumnIndexOrThrow("harga_jual")),
-                    dibuatPada = cursor.getString(cursor.getColumnIndexOrThrow("dibuat_pada")) ?: "",
-                    diubahPada = cursor.getString(cursor.getColumnIndexOrThrow("diubah_pada")) ?: ""
-                )
-            )
-        }
-        cursor.close()
-        return list
+    fun getAllProduk(includeInactive: Boolean = true): List<Produk> {
+        return runCatching {
+            val list = mutableListOf<Produk>()
+            val selection = if (includeInactive) {
+                "SELECT * FROM produk WHERE is_deleted=0 ORDER BY nama ASC"
+            } else {
+                "SELECT * FROM produk WHERE is_deleted=0 AND aktif=1 ORDER BY nama ASC"
+            }
+            readableDatabase.rawQuery(selection, null).use { cursor ->
+                while (cursor.moveToNext()) {
+                    list.add(
+                        Produk(
+                            id = cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                            nama = cursor.getString(cursor.getColumnIndexOrThrow("nama")),
+                            satuan = cursor.getString(cursor.getColumnIndexOrThrow("satuan")),
+                            stokSaatIni = cursor.getInt(cursor.getColumnIndexOrThrow("stok_saat_ini")),
+                            stokMinimum = cursor.getInt(cursor.getColumnIndexOrThrow("stok_minimum")),
+                            hargaJual = cursor.getInt(cursor.getColumnIndexOrThrow("harga_jual")),
+                            dibuatPada = cursor.getString(cursor.getColumnIndexOrThrow("dibuat_pada")) ?: "",
+                            diubahPada = cursor.getString(cursor.getColumnIndexOrThrow("diubah_pada")) ?: "",
+                            aktif = cursor.getInt(cursor.getColumnIndexOrThrow("aktif")) == 1
+                        )
+                    )
+                }
+            }
+            list
+        }.getOrDefault(emptyList())
     }
+
+    fun getActiveProduk(): List<Produk> = getAllProduk(includeInactive = false)
 
     fun getProdukById(id: Int): Produk? = getProdukById(readableDatabase, id)
 
     private fun getProdukById(db: SQLiteDatabase, id: Int): Produk? {
-        val cursor = db.rawQuery("SELECT * FROM produk WHERE id=?", arrayOf(id.toString()))
-        val produk = if (cursor.moveToFirst()) {
-            Produk(
-                id = cursor.getInt(cursor.getColumnIndexOrThrow("id")),
-                nama = cursor.getString(cursor.getColumnIndexOrThrow("nama")),
-                satuan = cursor.getString(cursor.getColumnIndexOrThrow("satuan")),
-                stokSaatIni = cursor.getInt(cursor.getColumnIndexOrThrow("stok_saat_ini")),
-                stokMinimum = cursor.getInt(cursor.getColumnIndexOrThrow("stok_minimum")),
-                hargaJual = cursor.getInt(cursor.getColumnIndexOrThrow("harga_jual")),
-                dibuatPada = cursor.getString(cursor.getColumnIndexOrThrow("dibuat_pada")) ?: "",
-                diubahPada = cursor.getString(cursor.getColumnIndexOrThrow("diubah_pada")) ?: ""
-            )
-        } else {
-            null
-        }
-        cursor.close()
-        return produk
+        return runCatching {
+            db.rawQuery("SELECT * FROM produk WHERE id=?", arrayOf(id.toString())).use { cursor ->
+                if (cursor.moveToFirst()) {
+                    Produk(
+                        id = cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                        nama = cursor.getString(cursor.getColumnIndexOrThrow("nama")),
+                        satuan = cursor.getString(cursor.getColumnIndexOrThrow("satuan")),
+                        stokSaatIni = cursor.getInt(cursor.getColumnIndexOrThrow("stok_saat_ini")),
+                        stokMinimum = cursor.getInt(cursor.getColumnIndexOrThrow("stok_minimum")),
+                        hargaJual = cursor.getInt(cursor.getColumnIndexOrThrow("harga_jual")),
+                        dibuatPada = cursor.getString(cursor.getColumnIndexOrThrow("dibuat_pada")) ?: "",
+                        diubahPada = cursor.getString(cursor.getColumnIndexOrThrow("diubah_pada")) ?: "",
+                        aktif = cursor.getInt(cursor.getColumnIndexOrThrow("aktif")) == 1
+                    )
+                } else {
+                    null
+                }
+            }
+        }.getOrNull()
     }
 
     fun insertPengeluaran(pengeluaran: Pengeluaran): Long {
-        return writableDatabase.insert(
-            "pengeluaran",
-            null,
-            ContentValues().apply {
-                put("tanggal_pengeluaran", FormatHelper.normalizeDateTime(pengeluaran.tanggalPengeluaran))
-                put("nama_pengeluaran", pengeluaran.namaPengeluaran)
-                put("nominal", pengeluaran.nominal)
-                put("catatan", pengeluaran.catatan)
-                put("is_deleted", 0)
-            }
-        )
+        return runCatching {
+            writableDatabase.insert(
+                "pengeluaran",
+                null,
+                ContentValues().apply {
+                    put("tanggal_pengeluaran", FormatHelper.normalizeDateTime(pengeluaran.tanggalPengeluaran))
+                    put("nama_pengeluaran", pengeluaran.namaPengeluaran)
+                    put("nominal", pengeluaran.nominal)
+                    put("catatan", pengeluaran.catatan)
+                    put("is_deleted", 0)
+                }
+            )
+        }.getOrDefault(-1L)
     }
 
     fun updatePengeluaran(pengeluaran: Pengeluaran): Boolean {
-        return writableDatabase.update(
-            "pengeluaran",
-            ContentValues().apply {
-                put("tanggal_pengeluaran", FormatHelper.normalizeDateTime(pengeluaran.tanggalPengeluaran))
-                put("nama_pengeluaran", pengeluaran.namaPengeluaran)
-                put("nominal", pengeluaran.nominal)
-                put("catatan", pengeluaran.catatan)
-            },
-            "id=?",
-            arrayOf(pengeluaran.id.toString())
-        ) > 0
+        return runCatching {
+            writableDatabase.update(
+                "pengeluaran",
+                ContentValues().apply {
+                    put("tanggal_pengeluaran", FormatHelper.normalizeDateTime(pengeluaran.tanggalPengeluaran))
+                    put("nama_pengeluaran", pengeluaran.namaPengeluaran)
+                    put("nominal", pengeluaran.nominal)
+                    put("catatan", pengeluaran.catatan)
+                },
+                "id=?",
+                arrayOf(pengeluaran.id.toString())
+            ) > 0
+        }.getOrDefault(false)
     }
 
     fun deletePengeluaran(id: Int): Boolean {
-        return writableDatabase.update(
-            "pengeluaran",
-            ContentValues().apply {
-                put("is_deleted", 1)
-            },
-            "id=? AND is_deleted=0",
-            arrayOf(id.toString())
-        ) > 0
+        return runCatching {
+            writableDatabase.update(
+                "pengeluaran",
+                ContentValues().apply {
+                    put("is_deleted", 1)
+                },
+                "id=? AND is_deleted=0",
+                arrayOf(id.toString())
+            ) > 0
+        }.getOrDefault(false)
     }
 
     fun getAllPengeluaran(): List<Pengeluaran> {
-        val list = mutableListOf<Pengeluaran>()
-        val cursor = readableDatabase.rawQuery(
-            "SELECT id, tanggal_pengeluaran, nama_pengeluaran, nominal, IFNULL(catatan, '') FROM pengeluaran WHERE is_deleted=0 ORDER BY tanggal_pengeluaran DESC, id DESC",
-            null
-        )
-        while (cursor.moveToNext()) {
-            list.add(
-                Pengeluaran(
-                    id = cursor.getInt(cursor.getColumnIndexOrThrow("id")),
-                    tanggalPengeluaran = cursor.getString(cursor.getColumnIndexOrThrow("tanggal_pengeluaran")),
-                    namaPengeluaran = cursor.getString(cursor.getColumnIndexOrThrow("nama_pengeluaran")),
-                    nominal = cursor.getInt(cursor.getColumnIndexOrThrow("nominal")),
-                    catatan = cursor.getString(cursor.getColumnIndexOrThrow("catatan")) ?: ""
-                )
-            )
-        }
-        cursor.close()
-        return list
+        return runCatching {
+            val list = mutableListOf<Pengeluaran>()
+            readableDatabase.rawQuery(
+                "SELECT id, tanggal_pengeluaran, nama_pengeluaran, nominal, IFNULL(catatan, '') AS catatan FROM pengeluaran WHERE is_deleted=0 ORDER BY tanggal_pengeluaran DESC, id DESC",
+                null
+            ).use { cursor ->
+                while (cursor.moveToNext()) {
+                    list.add(
+                        Pengeluaran(
+                            id = cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                            tanggalPengeluaran = cursor.getString(cursor.getColumnIndexOrThrow("tanggal_pengeluaran")),
+                            namaPengeluaran = cursor.getString(cursor.getColumnIndexOrThrow("nama_pengeluaran")),
+                            nominal = cursor.getInt(cursor.getColumnIndexOrThrow("nominal")),
+                            catatan = cursor.getString(cursor.getColumnIndexOrThrow("catatan")) ?: ""
+                        )
+                    )
+                }
+            }
+            list
+        }.getOrDefault(emptyList())
     }
 
     fun getPengeluaranById(id: Int): Pengeluaran? {
-        val cursor = readableDatabase.rawQuery(
-            "SELECT id, tanggal_pengeluaran, nama_pengeluaran, nominal, IFNULL(catatan, '') FROM pengeluaran WHERE id=?",
-            arrayOf(id.toString())
-        )
-        val item = if (cursor.moveToFirst()) {
-            Pengeluaran(
-                id = cursor.getInt(cursor.getColumnIndexOrThrow("id")),
-                tanggalPengeluaran = cursor.getString(cursor.getColumnIndexOrThrow("tanggal_pengeluaran")),
-                namaPengeluaran = cursor.getString(cursor.getColumnIndexOrThrow("nama_pengeluaran")),
-                nominal = cursor.getInt(cursor.getColumnIndexOrThrow("nominal")),
-                catatan = cursor.getString(cursor.getColumnIndexOrThrow("catatan")) ?: ""
-            )
-        } else {
-            null
-        }
-        cursor.close()
-        return item
+        return runCatching {
+            readableDatabase.rawQuery(
+                "SELECT id, tanggal_pengeluaran, nama_pengeluaran, nominal, IFNULL(catatan, '') AS catatan FROM pengeluaran WHERE id=?",
+                arrayOf(id.toString())
+            ).use { cursor ->
+                if (cursor.moveToFirst()) {
+                    Pengeluaran(
+                        id = cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                        tanggalPengeluaran = cursor.getString(cursor.getColumnIndexOrThrow("tanggal_pengeluaran")),
+                        namaPengeluaran = cursor.getString(cursor.getColumnIndexOrThrow("nama_pengeluaran")),
+                        nominal = cursor.getInt(cursor.getColumnIndexOrThrow("nominal")),
+                        catatan = cursor.getString(cursor.getColumnIndexOrThrow("catatan")) ?: ""
+                    )
+                } else {
+                    null
+                }
+            }
+        }.getOrNull()
     }
 
     fun getParameterAktif(produkId: Int): Int {
-        val cursor = readableDatabase.rawQuery(
-            "SELECT hasil_per_masak FROM parameter_produksi WHERE produk_id=? AND aktif=1 LIMIT 1",
-            arrayOf(produkId.toString())
-        )
-        val result = if (cursor.moveToFirst()) cursor.getInt(0) else 1
-        cursor.close()
-        return result
+        return runCatching {
+            readableDatabase.rawQuery(
+                "SELECT hasil_per_masak FROM parameter_produksi WHERE produk_id=? AND aktif=1 LIMIT 1",
+                arrayOf(produkId.toString())
+            ).use { cursor ->
+                if (cursor.moveToFirst()) cursor.getInt(0) else 1
+            }
+        }.getOrDefault(1)
     }
 
     private fun upsertParameter(db: SQLiteDatabase, produkId: Int, hasilPerMasak: Int) {
@@ -592,27 +785,29 @@ class DatabaseHelper(context: Context) :
     }
 
     fun getMutasiByProduk(produkId: Int): List<MutasiStok> {
-        val list = mutableListOf<MutasiStok>()
-        val cursor = readableDatabase.rawQuery(
-            "SELECT * FROM mutasi_stok WHERE produk_id=? ORDER BY tanggal_mutasi DESC, id DESC",
-            arrayOf(produkId.toString())
-        )
-        while (cursor.moveToNext()) {
-            list.add(
-                MutasiStok(
-                    id = cursor.getInt(cursor.getColumnIndexOrThrow("id")),
-                    produkId = cursor.getInt(cursor.getColumnIndexOrThrow("produk_id")),
-                    jenisReferensi = cursor.getString(cursor.getColumnIndexOrThrow("jenis_referensi")),
-                    referensiId = cursor.getInt(cursor.getColumnIndexOrThrow("referensi_id")),
-                    tanggal = cursor.getString(cursor.getColumnIndexOrThrow("tanggal_mutasi")),
-                    arah = cursor.getString(cursor.getColumnIndexOrThrow("arah")),
-                    jumlah = cursor.getInt(cursor.getColumnIndexOrThrow("jumlah")),
-                    catatan = cursor.getString(cursor.getColumnIndexOrThrow("catatan")) ?: ""
-                )
-            )
-        }
-        cursor.close()
-        return list
+        return runCatching {
+            val list = mutableListOf<MutasiStok>()
+            readableDatabase.rawQuery(
+                "SELECT * FROM mutasi_stok WHERE produk_id=? ORDER BY tanggal_mutasi DESC, id DESC",
+                arrayOf(produkId.toString())
+            ).use { cursor ->
+                while (cursor.moveToNext()) {
+                    list.add(
+                        MutasiStok(
+                            id = cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                            produkId = cursor.getInt(cursor.getColumnIndexOrThrow("produk_id")),
+                            jenisReferensi = cursor.getString(cursor.getColumnIndexOrThrow("jenis_referensi")),
+                            referensiId = cursor.getInt(cursor.getColumnIndexOrThrow("referensi_id")),
+                            tanggal = cursor.getString(cursor.getColumnIndexOrThrow("tanggal_mutasi")),
+                            arah = cursor.getString(cursor.getColumnIndexOrThrow("arah")),
+                            jumlah = cursor.getInt(cursor.getColumnIndexOrThrow("jumlah")),
+                            catatan = cursor.getString(cursor.getColumnIndexOrThrow("catatan")) ?: ""
+                        )
+                    )
+                }
+            }
+            list
+        }.getOrDefault(emptyList())
     }
 
     fun getRiwayatUmum(): List<RiwayatUmumItem> {

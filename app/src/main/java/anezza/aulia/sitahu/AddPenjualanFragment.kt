@@ -73,7 +73,7 @@ class AddPenjualanFragment : BaseScreenFragment(R.layout.fragment_tambah_penjual
         val helper = db ?: return
         val spinner = spProduk ?: return
 
-        listProduk = helper.getAllProduk()
+        listProduk = helper.getActiveProduk()
         if (listProduk.isEmpty()) {
             val adapter = ArrayAdapter(
                 requireContext(),

@@ -1,31 +1,38 @@
 package anezza.aulia.sitahu
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import anezza.aulia.sitahu.database.DatabaseHelper
 
 class PengeluaranFragment : BaseScreenFragment(R.layout.pengeluaran) {
 
     private var db: DatabaseHelper? = null
-    private var rvPengeluaran: RecyclerView? = null
+    private var lvPengeluaran: ListView? = null
     private var tvEmpty: TextView? = null
     private var tvTotalPengeluaran: TextView? = null
+    private var actvCari: AutoCompleteTextView? = null
 
-    private val items = mutableListOf<Pengeluaran>()
+    private val allItems = mutableListOf<Pengeluaran>()
+    private val filteredItems = mutableListOf<Pengeluaran>()
     private var adapter: PengeluaranAdapter? = null
+    private var suggestionAdapter: ArrayAdapter<String>? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         db = DatabaseHelper(requireContext())
-        rvPengeluaran = view.findViewById(R.id.rvPengeluaran)
+        lvPengeluaran = view.findViewById(R.id.lvPengeluaran)
         tvEmpty = view.findViewById(R.id.tvEmptyPengeluaran)
         tvTotalPengeluaran = view.findViewById(R.id.tvTotalPengeluaran)
+        actvCari = view.findViewById(R.id.actvCariPengeluaran)
 
         setupBack(view)
         view.findViewById<View>(R.id.btnTambahPengeluaran).setOnClickListener {
@@ -33,12 +40,21 @@ class PengeluaranFragment : BaseScreenFragment(R.layout.pengeluaran) {
         }
 
         adapter = PengeluaranAdapter(
-            items = items,
+            items = filteredItems,
             onEdit = { item -> host().openPengeluaranForm(item.id) },
             onDelete = { item -> confirmDelete(item) }
         )
-        rvPengeluaran?.layoutManager = LinearLayoutManager(requireContext())
-        rvPengeluaran?.adapter = adapter
+        lvPengeluaran?.adapter = adapter
+
+        suggestionAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, mutableListOf<String>())
+        actvCari?.setAdapter(suggestionAdapter)
+        actvCari?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                applyFilter(s?.toString().orEmpty())
+            }
+            override fun afterTextChanged(s: Editable?) = Unit
+        })
 
         parentFragmentManager.setFragmentResultListener(RESULT_KEY, viewLifecycleOwner) { _, _ ->
             refreshContent()
@@ -51,14 +67,40 @@ class PengeluaranFragment : BaseScreenFragment(R.layout.pengeluaran) {
 
     private fun loadData() {
         val helper = db ?: return
-        items.clear()
-        items.addAll(helper.getAllPengeluaran())
+        allItems.clear()
+        allItems.addAll(helper.getAllPengeluaran())
+        tvTotalPengeluaran?.text = FormatHelper.rupiah(allItems.sumOf { it.nominal })
+        updateSuggestions()
+        applyFilter(actvCari?.text?.toString().orEmpty())
+    }
+
+    private fun updateSuggestions() {
+        val data = allItems.map { it.namaPengeluaran }.distinct().sorted()
+        suggestionAdapter?.clear()
+        suggestionAdapter?.addAll(data)
+        suggestionAdapter?.notifyDataSetChanged()
+    }
+
+    private fun applyFilter(query: String) {
+        val keyword = query.trim()
+        filteredItems.clear()
+        filteredItems.addAll(
+            if (keyword.isEmpty()) {
+                allItems
+            } else {
+                allItems.filter { it.namaPengeluaran.contains(keyword, ignoreCase = true) || it.catatan.contains(keyword, ignoreCase = true) }
+            }
+        )
         adapter?.notifyDataSetChanged()
 
-        val isEmpty = items.isEmpty()
+        val isEmpty = filteredItems.isEmpty()
         tvEmpty?.visibility = if (isEmpty) View.VISIBLE else View.GONE
-        rvPengeluaran?.visibility = if (isEmpty) View.GONE else View.VISIBLE
-        tvTotalPengeluaran?.text = FormatHelper.rupiah(items.sumOf { it.nominal })
+        lvPengeluaran?.visibility = if (isEmpty) View.GONE else View.VISIBLE
+        if (isEmpty && keyword.isNotEmpty()) {
+            tvEmpty?.text = "Pengeluaran dengan kata kunci '$keyword' tidak ditemukan."
+        } else {
+            tvEmpty?.text = "Belum ada pengeluaran tersimpan."
+        }
     }
 
     private fun confirmDelete(item: Pengeluaran) {
@@ -69,7 +111,7 @@ class PengeluaranFragment : BaseScreenFragment(R.layout.pengeluaran) {
             .setPositiveButton("Hapus") { _, _ ->
                 val deleted = helper.deletePengeluaran(item.id)
                 if (deleted) {
-                    Toast.makeText(requireContext(), "Pengeluaran disembunyikan dari daftar aktif", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Pengeluaran dihapus", Toast.LENGTH_SHORT).show()
                     refreshContent()
                 } else {
                     Toast.makeText(requireContext(), "Gagal menghapus pengeluaran", Toast.LENGTH_SHORT).show()

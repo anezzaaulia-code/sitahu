@@ -74,7 +74,7 @@ class PenjualanActivity : AppCompatActivity() {
     }
 
     private fun loadProduk() {
-        listProduk = db.getAllProduk()
+        listProduk = db.getActiveProduk()
         if (listProduk.isEmpty()) {
             val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, listOf("Belum ada produk"))
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
